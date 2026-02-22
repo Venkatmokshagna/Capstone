@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Administrator Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <!-- Google Maps API - Replace YOUR_API_KEY with your actual key -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZWZXkBxdSevip6RNE6NpiyvHiV6SP9nw&callback=initMap&libraries=visualization"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Custom scrollbar styles */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 10px;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+        
+        /* Profile sidebar styles - Updated to open from right */
+        .profile-sidebar {
+            position: fixed;
+            top: 0;
+            right: -100%; /* Changed from left to right */
+            width: 320px;
+            height: 100vh;
+            background: white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: right 0.3s ease; /* Changed from left to right */
+            overflow-y: auto;
+        }
+        
+        .dark .profile-sidebar {
+            background: #1f2937;
+        }
+        
+        .profile-sidebar.active {
+            right: 0; /* Changed from left to right */
+            left: auto;
+        }
+        
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Profile dropdown animation */
+        .profile-dropdown {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .profile-dropdown.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+        
+        /* Map styles */
+        #hotspot-map {
+            height: 256px;
+            width: 100%;
+            border-radius: 0.5rem;
+        }
+        
+        .map-container {
+            position: relative;
+        }
+        
+        .map-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 100;
+            background: white;
+            border-radius: 4px;
+            padding: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .dark .map-controls {
+            background: #374151;
+            color: white;
+        }
+        
+        .map-legend {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            z-index: 100;
+            background: white;
+            border-radius: 4px;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            font-size: 12px;
+        }
+        
+        .dark .map-legend {
+            background: #374151;
+            color: white;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+    <!-- Profile Sidebar -->
+    <div id="profile-sidebar" class="profile-sidebar">
+        <div class="p-6 border-b dark:border-gray-700">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-gray-50">Profile</h2>
+                <button id="close-sidebar" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5 text-gray-700 dark:text-gray-300"></i>
+                </button>
+            </div>
+            
+            <div class="flex flex-col items-center mb-6">
+                <div class="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mb-4">
+                    <i data-lucide="user" class="w-10 h-10 text-white"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-50">Admin User</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Health Administrator</p>
+            </div>
+        </div>
+        
+        <div class="p-6">
+            <div class="mb-6">
+                <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">ACCOUNT</h4>
+                <ul class="space-y-2">
+                    <li>
+                        <a href="#" class="flex items-center gap-3 p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            <i data-lucide="user" class="w-5 h-5"></i>
+                            <span>My Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center gap-3 p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            <i data-lucide="settings" class="w-5 h-5"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center gap-3 p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            <i data-lucide="bell" class="w-5 h-5"></i>
+                            <span>Notifications</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="mb-6">
+                <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">DASHBOARD</h4>
+                <ul class="space-y-2">
+                    <li>
+                        <a href="#" class="flex items-center gap-3 p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            <i data-lucide="activity" class="w-5 h-5"></i>
+                            <span>Analytics</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center gap-3 p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            <i data-lucide="users" class="w-5 h-5"></i>
+                            <span>User Management</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center gap-3 p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            <i data-lucide="file-text" class="w-5 h-5"></i>
+                            <span>Reports</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t dark:border-gray-700">
+                <a href="index.html" class="flex items-center gap-3 p-2 rounded-lg text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                    <i data-lucide="log-out" class="w-5 h-5"></i>
+                    <span>Log Out</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sidebar Overlay -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700">
+        <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
+                    <i data-lucide="shield-check" class="w-5 h-5 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-gray-900 dark:text-gray-50">Health Administrator Dashboard</h1>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Smart Health Surveillance & Early Warning</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="#" class="px-4 py-2 bg-indigo-100 dark:bg-gray-700 hover:bg-indigo-200 dark:hover:bg-gray-600 rounded-lg transition-colors text-indigo-700 dark:text-gray-300 flex items-center gap-2">
+                    <i data-lucide="home" class="w-4 h-4"></i>
+                    <span>Home</span>
+                </a>
+                
+                <!-- Profile Button -->
+                <button id="profile-btn" class="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors text-gray-700 dark:text-gray-300">
+                    <i data-lucide="user" class="w-4 h-4"></i>
+                    <span>Admin User</span>
+                </button>
+                
+                <!-- Dark Mode Toggle -->
+                <button id="theme-toggle" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors duration-300">
+                    <i data-lucide="sun" id="sun-icon" class="w-5 h-5"></i>
+                    <i data-lucide="moon" id="moon-icon" class="w-5 h-5 hidden"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="container mx-auto px-6 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Card: Key Performance Indicators -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 transition-transform hover:scale-[1.01] duration-300">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-3 rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300">
+                        <i data-lucide="activity" class="w-5 h-5"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">Overview</h2>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                        <span class="text-gray-600 dark:text-gray-300">Total Cases Reported:</span>
+                        <span class="font-bold text-gray-900 dark:text-gray-50 text-2xl">487</span>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                        <span class="text-gray-600 dark:text-gray-300">Active Outbreaks:</span>
+                        <span class="font-bold text-red-600 text-2xl">3</span>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                        <span class="text-gray-600 dark:text-gray-300">Critical Alerts Today:</span>
+                        <span class="font-bold text-yellow-500 text-2xl">7</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card: Hotspot Visualization with Google Maps -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 transition-transform hover:scale-[1.01] duration-300">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-3 rounded-full bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300">
+                        <i data-lucide="map-pin" class="w-5 h-5"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">Outbreak Hotspots</h2>
+                </div>
+                <div class="map-container">
+                    <div id="hotspot-map"></div>
+                    <div class="map-controls">
+                        <button id="toggle-heatmap" class="px-2 py-1 bg-indigo-500 text-white rounded text-xs">Toggle Heatmap</button>
+                    </div>
+                    <div class="map-legend">
+                        <div class="legend-item">
+                            <div class="legend-color bg-green-500"></div>
+                            <span>Low Risk</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color bg-yellow-500"></div>
+                            <span>Medium Risk</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color bg-red-500"></div>
+                            <span>High Risk</span>
+                        </div>
+                    </div>
+                </div>
+                <ul class="mt-4 space-y-2">
+                    <li class="p-2 bg-gray-50 dark:bg-gray-700 rounded-lg flex justify-between items-center">
+                        <span class="text-sm text-gray-700 dark:text-gray-300">North Sector</span>
+                        <span class="text-xs font-semibold text-red-600">HIGH RISK</span>
+                    </li>
+                    <li class="p-2 bg-gray-50 dark:bg-gray-700 rounded-lg flex justify-between items-center">
+                        <span class="text-sm text-gray-700 dark:text-gray-300">Village 3A</span>
+                        <span class="text-xs font-semibold text-yellow-500">MEDIUM RISK</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Card: Water Quality Monitoring -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 transition-transform hover:scale-[1.01] duration-300">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-3 rounded-full bg-cyan-100 text-cyan-600 dark:bg-cyan-900 dark:text-cyan-300">
+                        <i data-lucide="droplets" class="w-5 h-5"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">Water Quality</h2>
+                </div>
+                <div class="space-y-4">
+                    <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                        <p class="font-semibold text-gray-900 dark:text-gray-50">Source A2</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Status: <span class="text-red-600 font-semibold">Contaminated</span></p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Last reported: 3 hours ago</p>
+                    </div>
+                    <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                        <p class="font-semibold text-gray-900 dark:text-gray-50">Well 1B</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Status: <span class="text-green-600 font-semibold">Safe</span></p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Last reported: 1 day ago</p>
+                    </div>
+                </div>
+                <button class="mt-4 w-full py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors show-modal" data-title="Detailed Water Reports" data-message="This section would show detailed reports from all water sources and IoT sensors.">
+                    View Full Report
+                </button>
+            </div>
+
+            <!-- Card: Real-Time Alerts -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 lg:col-span-2 transition-transform hover:scale-[1.01] duration-300">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-3 rounded-full bg-yellow-100 text-yellow-600 dark:bg-yellow-900 dark:text-yellow-300">
+                        <i data-lucide="bell" class="w-5 h-5"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">Real-Time Alerts</h2>
+                </div>
+                <ul class="space-y-4">
+                    <li class="p-4 bg-red-50 dark:bg-gray-700 border-l-4 border-red-500 rounded-xl">
+                        <p class="font-semibold text-gray-900 dark:text-gray-50">CRITICAL: Suspected Cholera Outbreak</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">AI model detected an anomaly in symptoms reported in Ward 7. Immediate investigation required.</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Oct 26, 2025 - 11:20 AM</p>
+                    </li>
+                    <li class="p-4 bg-orange-50 dark:bg-gray-700 border-l-4 border-orange-500 rounded-xl">
+                        <p class="font-semibold text-gray-900 dark:text-gray-50">URGENT: Water Source A2 Contaminated</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Bacterial count in Source A2 is 3x higher than safe limits. Issue a public health warning.</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Oct 26, 2025 - 10:45 AM</p>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Card: Intervention Tracking -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 transition-transform hover:scale-[1.01] duration-300">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-3 rounded-full bg-purple-100 text-purple-600 dark:bg-purple-900 dark:text-purple-300">
+                        <i data-lucide="tool" class="w-5 h-5"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">Intervention Tracking</h2>
+                </div>
+                <ul class="space-y-4">
+                    <li class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                        <p class="font-semibold text-gray-900 dark:text-gray-50">Medical Team Dispatched</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Status: <span class="text-blue-600 font-semibold">En Route</span></p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">To: South Block</p>
+                    </li>
+                    <li class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                        <p class="font-semibold text-gray-900 dark:text-gray-50">Public Awareness Campaign</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Status: <span class="text-green-600 font-semibold">Active</span></p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Target: Entire District</p>
+                    </li>
+                </ul>
+                <button class="mt-4 w-full py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors show-modal" data-title="Manage Interventions" data-message="This section would provide tools to manage and allocate resources.">
+                    Manage Resources
+                </button>
+            </div>
+
+            <!-- Card: AI/ML Insights -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 transition-transform hover:scale-[1.01] duration-300">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-3 rounded-full bg-orange-100 text-orange-600 dark:bg-orange-900 dark:text-orange-300">
+                        <i data-lucide="bot" class="w-5 h-5"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-50">AI/ML Predictions</h2>
+                </div>
+                <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">AI models are constantly analyzing data to predict future outbreaks. See the latest insights.</p>
+                <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                    <p class="font-semibold text-gray-900 dark:text-gray-50">Probability of Outbreak</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Next 72 Hours: <span class="font-bold text-red-600">35%</span></p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Top Predicted Area: <span class="font-semibold text-gray-900 dark:text-gray-50">West Zone</span></p>
+                </div>
+                <button class="mt-4 w-full py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors show-modal" data-title="AI Model Insights" data-message="This section would display detailed analytics and predictive models for disease outbreaks.">
+                    View Full Report
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Message Modal -->
+    <div id="messageModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800 text-center">
+            <div class="mt-3 text-center">
+                <i data-lucide="info" class="w-16 h-16 text-blue-500 mx-auto mb-4"></i>
+                <h3 id="modalTitle" class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-50"></h3>
+                <div class="mt-2 px-7 py-3">
+                    <p id="modalMessage" class="text-sm text-gray-500 dark:text-gray-400"></p>
+                </div>
+                <div class="items-center px-4 py-3">
+                    <button id="closeModal" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-base font-medium rounded-lg w-full shadow-sm hover:from-blue-700 hover:to-purple-700 transition-all focus:outline-none focus:ring-2 focus:ring-blue-600">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Google Maps initialization
+        let map;
+        let heatmap;
+        let markers = [];
+        
+        function initMap() {
+            // Create a map centered on a sample location
+            map = new google.maps.Map(document.getElementById('hotspot-map'), {
+                zoom: 12,
+                center: { lat: 40.7128, lng: -74.0060 }, // New York coordinates as example
+                styles: [
+                    {
+                        "featureType": "all",
+                        "elementType": "geometry",
+                        "stylers": [{ "color": "#f5f5f5" }]
+                    },
+                    {
+                        "featureType": "all",
+                        "elementType": "labels.text.fill",
+                        "stylers": [{ "gamma": 0.01 }, { "lightness": 20 }]
+                    },
+                    {
+                        "featureType": "all",
+                        "elementType": "labels.text.stroke",
+                        "stylers": [{ "saturation": -31 }, { "lightness": -33 }, { "weight": 2 }, { "gamma": 0.8 }]
+                    },
+                    {
+                        "featureType": "all",
+                        "elementType": "labels.icon",
+                        "stylers": [{ "visibility": "off" }]
+                    },
+                    {
+                        "featureType": "landscape",
+                        "elementType": "geometry",
+                        "stylers": [{ "lightness": 30 }, { "saturation": 30 }, { "color": "#f0f0f0" }]
+                    },
+                    {
+                        "featureType": "poi",
+                        "elementType": "geometry",
+                        "stylers": [{ "saturation": 20 }]
+                    },
+                    {
+                        "featureType": "poi.park",
+                        "elementType": "geometry",
+                        "stylers": [{ "lightness": 20 }, { "saturation": -20 }]
+                    },
+                    {
+                        "featureType": "road",
+                        "elementType": "geometry",
+                        "stylers": [{ "lightness": 10 }, { "saturation": -30 }]
+                    },
+                    {
+                        "featureType": "road",
+                        "elementType": "geometry.stroke",
+                        "stylers": [{ "saturation": 25 }, { "lightness": 25 }]
+                    },
+                    {
+                        "featureType": "water",
+                        "elementType": "all",
+                        "stylers": [{ "lightness": -20 }]
+                    }
+                ]
+            });
+            
+            // Add outbreak hotspots with different colors based on risk level
+            const hotspots = [
+                { lat: 40.7128, lng: -74.0060, title: 'North Sector', risk: 'high', cases: 42 },
+                { lat: 40.7282, lng: -73.9942, title: 'Village 3A', risk: 'medium', cases: 18 },
+                { lat: 40.7505, lng: -73.9934, title: 'East District', risk: 'low', cases: 5 },
+                { lat: 40.7589, lng: -73.9851, title: 'Central Hospital', risk: 'high', cases: 35 },
+                { lat: 40.6892, lng: -74.0445, title: 'South Waterfront', risk: 'medium', cases: 12 }
+            ];
+            
+            // Create markers for each hotspot
+            hotspots.forEach(hotspot => {
+                let iconColor;
+                switch(hotspot.risk) {
+                    case 'high': iconColor = 'red'; break;
+                    case 'medium': iconColor = 'yellow'; break;
+                    case 'low': iconColor = 'green'; break;
+                    default: iconColor = 'gray';
+                }
+                
+                const marker = new google.maps.Marker({
+                    position: { lat: hotspot.lat, lng: hotspot.lng },
+                    map: map,
+                    title: hotspot.title,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 10,
+                        fillColor: iconColor,
+                        fillOpacity: 0.7,
+                        strokeWeight: 2,
+                        strokeColor: 'white'
+                    }
+                });
+                
+                // Add info window
+                const infoWindow = new google.maps.InfoWindow({
+                    content: `
+                        <div class="p-2">
+                            <h3 class="font-bold">${hotspot.title}</h3>
+                            <p>Risk Level: <span class="font-semibold ${hotspot.risk === 'high' ? 'text-red-600' : hotspot.risk === 'medium' ? 'text-yellow-600' : 'text-green-600'}">${hotspot.risk.toUpperCase()}</span></p>
+                            <p>Reported Cases: ${hotspot.cases}</p>
+                        </div>
+                    `
+                });
+                
+                marker.addListener('click', () => {
+                    infoWindow.open(map, marker);
+                });
+                
+                markers.push(marker);
+            });
+            
+            // Prepare heatmap data
+            const heatmapData = hotspots.map(hotspot => {
+                return {
+                    location: new google.maps.LatLng(hotspot.lat, hotspot.lng),
+                    weight: hotspot.cases
+                };
+            });
+            
+            // Create heatmap layer
+            heatmap = new google.maps.visualization.HeatmapLayer({
+                data: heatmapData,
+                map: null, // Initially not shown
+                radius: 30,
+                opacity: 0.6
+            });
+            
+            // Toggle heatmap button functionality
+            document.getElementById('toggle-heatmap').addEventListener('click', () => {
+                if (heatmap.getMap()) {
+                    heatmap.setMap(null);
+                } else {
+                    heatmap.setMap(map);
+                }
+            });
+        }
+        
+        // If the Google Maps API fails to load
+        window.gm_authFailure = function() {
+            document.getElementById('hotspot-map').innerHTML = `
+                <div class="h-full bg-gray-200 dark:bg-gray-700 rounded-lg flex flex-col items-center justify-center p-4">
+                    <i data-lucide="alert-triangle" class="w-10 h-10 text-yellow-500 mb-2"></i>
+                    <p class="text-gray-500 dark:text-gray-400 text-center">Google Maps failed to load. Please check your API key.</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-2 text-center">Replace YOUR_API_KEY in the script tag with your actual Google Maps API key.</p>
+                </div>
+            `;
+            lucide.createIcons();
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                lucide.createIcons();
+            }
+
+            // Dark Mode Toggle Logic
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const sunIcon = document.getElementById('sun-icon');
+            const moonIcon = document.getElementById('moon-icon');
+            
+            const loadTheme = () => {
+                const savedTheme = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                    document.documentElement.classList.add('dark');
+                    sunIcon.classList.add('hidden');
+                    moonIcon.classList.remove('hidden');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    sunIcon.classList.remove('hidden');
+                    moonIcon.classList.add('hidden');
+                }
+            };
+            
+            loadTheme();
+
+            themeToggleBtn.addEventListener('click', () => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                if (isDark) {
+                    localStorage.setItem('theme', 'dark');
+                    sunIcon.classList.add('hidden');
+                    moonIcon.classList.remove('hidden');
+                } else {
+                    localStorage.setItem('theme', 'light');
+                    sunIcon.classList.remove('hidden');
+                    moonIcon.classList.add('hidden');
+                }
+            });
+
+            // Message Modal Logic
+            const messageModal = document.getElementById('messageModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalMessage = document.getElementById('modalMessage');
+            const closeModalBtn = document.getElementById('closeModal');
+
+            document.querySelectorAll('.show-modal').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const title = e.currentTarget.getAttribute('data-title');
+                    const message = e.currentTarget.getAttribute('data-message');
+                    modalTitle.textContent = title;
+                    modalMessage.textContent = message;
+                    messageModal.classList.remove('hidden');
+                });
+            });
+
+            closeModalBtn.addEventListener('click', () => {
+                messageModal.classList.add('hidden');
+            });
+
+            // Close modal when clicking outside
+            messageModal.addEventListener('click', (e) => {
+                if (e.target === messageModal) {
+                    messageModal.classList.add('hidden');
+                }
+            });
+
+            // Profile Sidebar Logic
+            const profileBtn = document.getElementById('profile-btn');
+            const profileSidebar = document.getElementById('profile-sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            
+            // Open sidebar
+            profileBtn.addEventListener('click', () => {
+                profileSidebar.classList.add('active');
+                sidebarOverlay.classList.add('active');
+            });
+            
+            // Close sidebar
+            function closeSidebar() {
+                profileSidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+            }
+            
+            closeSidebarBtn.addEventListener('click', closeSidebar);
+            sidebarOverlay.addEventListener('click', closeSidebar);
+            
+            // Close sidebar with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeSidebar();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

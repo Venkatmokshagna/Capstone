@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Outbreak Prediction Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="gradient-bg text-white py-8">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl font-bold text-center mb-2">🦠 AI Outbreak Prediction Engine</h1>
+            <p class="text-center text-blue-100">Advanced Disease Outbreak Forecasting & Patient Data Analytics</p>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg card-shadow p-6 mb-8">
+            <h2 class="text-2xl font-semibold mb-6 text-gray-800">📍 Location & Prediction Settings</h2>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Pin Code</label>
+                    <input type="text" id="pinCode" placeholder="Enter 6-digit pin code" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           maxlength="6" pattern="[0-9]{6}">
+                    <div id="areaInfo" class="mt-2 text-sm text-gray-600"></div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Current Cases</label>
+                    <input type="number" id="currentCases" placeholder="Enter current case count" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           min="0" max="100000">
+                    <div class="mt-1 text-xs text-gray-500">Leave empty for auto-calculation</div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Prediction Period (Days)</label>
+                    <select id="predictionDays" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="7">7 Days</option>
+                        <option value="14" selected>14 Days</option>
+                        <option value="30">30 Days</option>
+                        <option value="60">60 Days</option>
+                        <option value="90">90 Days</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Water-Borne Disease Type</label>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <button class="disease-btn px-4 py-2 border border-gray-300 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors" data-disease="cholera">
+                        💧 Cholera
+                    </button>
+                    <button class="disease-btn px-4 py-2 border border-gray-300 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors" data-disease="typhoid">
+                        🦠 Typhoid
+                    </button>
+                    <button class="disease-btn px-4 py-2 border border-gray-300 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors" data-disease="hepatitis">
+                        🟡 Hepatitis A
+                    </button>
+                    <button class="disease-btn px-4 py-2 border border-gray-300 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors" data-disease="diarrhea">
+                        🤢 Diarrheal Diseases
+                    </button>
+                </div>
+            </div>
+
+            <button id="predictBtn" class="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+                🔮 Generate Prediction
+            </button>
+        </div>
+
+        <div id="resultsSection" class="hidden">
+            <div class="bg-white rounded-lg card-shadow p-6 mb-6">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800">📍 Area Information</h3>
+                <div id="areaDetails" class="grid md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    </div>
+            </div>
+
+            <div class="bg-white rounded-lg card-shadow p-6 mb-6">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800">📊 Outbreak Prediction</h3>
+                <div id="predictionResults" class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    </div>
+            </div>
+
+            <div class="bg-white rounded-lg card-shadow p-6">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800">👥 Patient Data Analytics</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-medium text-gray-700 mb-3">Current Patient Statistics</h4>
+                        <div id="patientStats" class="space-y-2">
+                            </div>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-gray-700 mb-3">Data Access Controls</h4>
+                        <div class="space-y-3">
+                            <button class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-colors" onclick="accessPatientData('demographics')">
+                                📋 Demographics Data
+                            </button>
+                            <button class="w-full bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-4 rounded-lg transition-colors" onclick="accessPatientData('symptoms')">
+                                🩺 Symptoms Analysis
+                            </button>
+                            <button class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg transition-colors" onclick="accessPatientData('treatment')">
+                                💊 Treatment Records
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="patientModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+            <div class="bg-white rounded-lg p-6 max-w-4xl w-full mx-4 max-h-96 overflow-y-auto">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 id="modalTitle" class="text-xl font-semibold text-gray-800"></h3>
+                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                </div>
+                <div id="modalContent" class="text-gray-600">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // Sample pin code to area mapping with detailed location info
+    const pinCodeData = {
+        '110001': { 
+            area: 'Connaught Place', 
+            city: 'New Delhi', 
+            state: 'Delhi', 
+            population: 45000,
+            district: 'Central Delhi',
+            coordinates: '28.6315° N, 77.2167° E',
+            waterSources: 'Yamuna River, Municipal Supply',
+            riskFactors: 'High population density, street food vendors'
+        },
+        '400001': { 
+            area: 'Fort', 
+            city: 'Mumbai', 
+            state: 'Maharashtra', 
+            population: 52000,
+            district: 'Mumbai City',
+            coordinates: '18.9388° N, 72.8354° E',
+            waterSources: 'Municipal Supply, Groundwater',
+            riskFactors: 'Coastal area, monsoon flooding'
+        },
+        '560001': { 
+            area: 'Bangalore GPO', 
+            city: 'Bangalore', 
+            state: 'Karnataka', 
+            population: 38000,
+            district: 'Bangalore Urban',
+            coordinates: '12.9716° N, 77.5946° E',
+            waterSources: 'Cauvery River, Borewells',
+            riskFactors: 'Rapid urbanization, water scarcity'
+        },
+        '600001': { 
+            area: 'Chennai GPO', 
+            city: 'Chennai', 
+            state: 'Tamil Nadu', 
+            population: 41000,
+            district: 'Chennai',
+            coordinates: '13.0827° N, 80.2707° E',
+            waterSources: 'Municipal Supply, Desalination',
+            riskFactors: 'Coastal flooding, water contamination'
+        },
+        '700001': { 
+            area: 'Kolkata GPO', 
+            city: 'Kolkata', 
+            state: 'West Bengal', 
+            population: 47000,
+            district: 'Kolkata',
+            coordinates: '22.5726° N, 88.3639° E',
+            waterSources: 'Hooghly River, Municipal Supply',
+            riskFactors: 'River pollution, poor sanitation'
+        },
+        '500001': { 
+            area: 'Hyderabad GPO', 
+            city: 'Hyderabad', 
+            state: 'Telangana', 
+            population: 43000,
+            district: 'Hyderabad',
+            coordinates: '17.3850° N, 78.4867° E',
+            waterSources: 'Krishna River, Groundwater',
+            riskFactors: 'Industrial pollution, water shortage'
+        },
+        
+        // --- NORTHEAST REGION PINCODES ---
+        '781001': { 
+            area: 'Guwahati GPO', 
+            city: 'Guwahati', 
+            state: 'Assam', 
+            population: 40000,
+            district: 'Kamrup Metropolitan',
+            coordinates: '26.1800° N, 91.7300° E',
+            waterSources: 'Brahmaputra River, Municipal Supply',
+            riskFactors: 'River flooding during monsoon, proximity to river'
+        },
+        '799001': {
+            area: 'Agartala H.O',
+            city: 'Agartala',
+            state: 'Tripura',
+            population: 55000,
+            district: 'West Tripura',
+            coordinates: '23.8315° N, 91.2868° E',
+            waterSources: 'Haora River, Municipal Supply',
+            riskFactors: 'Monsoon flooding, cross-border river pollution'
+        },
+        '795001': {
+            area: 'Imphal H.O',
+            city: 'Imphal',
+            state: 'Manipur',
+            population: 48000,
+            district: 'Imphal West',
+            coordinates: '24.8170° N, 93.9368° E',
+            waterSources: 'Imphal River, Loktak Lake, Springs',
+            riskFactors: 'Frequent flooding, contamination of local water bodies'
+        },
+        '793001': {
+            area: 'Shillong GPO',
+            city: 'Shillong',
+            state: 'Meghalaya',
+            population: 42000,
+            district: 'East Khasi Hills',
+            coordinates: '25.5788° N, 91.8933° E',
+            waterSources: 'Umiam Lake, Springs, Municipal Supply',
+            riskFactors: 'High rainfall causing contamination runoff'
+        },
+        '796001': {
+            area: 'Aizawl H.O',
+            city: 'Aizawl',
+            state: 'Mizoram',
+            population: 45000,
+            district: 'Aizawl',
+            coordinates: '23.7271° N, 92.7176° E',
+            waterSources: 'Tlawng River, Rainwater harvesting, Springs',
+            riskFactors: 'Landslides affecting pipelines, reliance on natural springs'
+        },
+        '797001': {
+            area: 'Kohima H.O',
+            city: 'Kohima',
+            state: 'Nagaland',
+            population: 38000,
+            district: 'Kohima',
+            coordinates: '25.6751° N, 94.1021° E',
+            waterSources: 'Natural springs, Dzüko Valley streams',
+            riskFactors: 'Hilly terrain, potential for source contamination'
+        },
+        '786184': {
+            area: 'Nalani Gaon (Nalani village, “Nalani Gaon” / Nalani Dalani)',
+            city: 'Chabubua Town',
+            state: 'Assam',
+            population: 35000,
+            district: 'Dibrugarh',
+            coordinates: '27.40°N, 95.03°E',
+            waterSources: 'Tubewell / groundwater (tube-well water used for drinking).',
+            riskFactors: 'Investigation found E. coli and Shigella in stool/water; many cases used tubewell water, low pre-treatment of drinking water, poor hand hygiene, poultry farms near houses (flies), and persistent open-defecation / poor sanitation — WASH gaps identified as drivers. (case control / lab work).'
+        },
+        '794111': {
+            area: 'Williamnagar town & outskirts',
+            city: 'Williamnagar (Tura / East Garo Hills HQ)',
+            state: 'Meghalaya',
+            population: 18000-19000,
+            district: 'East Garo Hills',
+            coordinates: '25.53°N, 90.59°E',
+            waterSources: 'Raw water from Chibok / Simsang (river / open wells / raw water used for supply); open wells in affected areas.',
+            riskFactors: 'Local reporting (April 2021) recorded ~200 hospital admissions; PHE teams tested raw water from Chibok and Simsang, disinfected open wells, and advised boiling water. Risk factors: suspected contamination of raw water / open wells (cause under investigation), inadequate treatment/contamination after heavy rains; public health response included disinfection and boil-water advisories.'
+        }
+    };
+
+    let selectedDisease = '';
+    let currentPinCode = '';
+    let currentDays = 14;
+
+    // Pin code input handler
+    document.getElementById('pinCode').addEventListener('input', function(e) {
+        const pinCode = e.target.value;
+        const areaInfo = document.getElementById('areaInfo');
+        
+        if (pinCode.length === 6) {
+            currentPinCode = pinCode;
+            if (pinCodeData[pinCode]) {
+                const data = pinCodeData[pinCode];
+                areaInfo.innerHTML = `📍 ${data.area}, ${data.city}, ${data.state}`;
+                areaInfo.className = 'mt-2 text-sm text-green-600 font-medium';
+            } else {
+                areaInfo.innerHTML = '📍 Sample Area (Pin code not in database)';
+                areaInfo.className = 'mt-2 text-sm text-orange-600';
+            }
+        } else {
+            areaInfo.innerHTML = '';
+        }
+    });
+
+    // Disease selection
+    document.querySelectorAll('.disease-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.disease-btn').forEach(b => {
+                b.classList.remove('bg-blue-100', 'border-blue-500', 'text-blue-700');
+                b.classList.add('border-gray-300');
+            });
+            
+            this.classList.add('bg-blue-100', 'border-blue-500', 'text-blue-700');
+            this.classList.remove('border-gray-300');
+            selectedDisease = this.dataset.disease;
+        });
+    });
+
+    // Prediction days change
+    document.getElementById('predictionDays').addEventListener('change', function(e) {
+        currentDays = parseInt(e.target.value);
+    });
+
+    // Generate prediction
+    document.getElementById('predictBtn').addEventListener('click', function() {
+        const pinCode = document.getElementById('pinCode').value;
+        
+        if (!pinCode || pinCode.length !== 6) {
+            alert('Please enter a valid 6-digit pin code');
+            return;
+        }
+        
+        if (!selectedDisease) {
+            alert('Please select a disease type');
+            return;
+        }
+
+        generatePrediction();
+    });
+
+    // Function to call ML API
+    async function callMLPredictionAPI(pinCode, disease, days, currentCases) {
+        // This is a mock function. In a real application, you would make a fetch request here.
+        // For demonstration, we'll generate some plausible fake data.
+        console.log(`Calling mock API for pin: ${pinCode}, disease: ${disease}, days: ${days}`);
+
+        // Simulate network delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        const areaData = pinCodeData[pinCode] || { population: 50000 };
+        const baseCases = currentCases || Math.floor(Math.random() * (areaData.population / 2000));
+        const growthRate = (Math.random() * 2 + 0.5).toFixed(2); // Random growth rate between 0.5% and 2.5%
+        let predicted = baseCases;
+        for(let i=0; i<days; i++) {
+            predicted *= (1 + (growthRate/100));
+        }
+        predicted = Math.round(predicted);
+
+        let riskLevel = 'Low';
+        if (predicted / areaData.population > 0.005) {
+            riskLevel = 'High';
+        } else if (predicted / areaData.population > 0.002) {
+            riskLevel = 'Medium';
+        }
+
+        const mockResponse = {
+            success: true,
+            data: {
+                currentCases: baseCases,
+                predictedCases: predicted,
+                dailyGrowthRate: growthRate,
+                riskLevel: riskLevel,
+            }
+        };
+        
+        // In a real scenario, you would not have the `if(true)` block.
+        // This simulates a successful API call for the demo.
+        if (true) { // Directly return mock data instead of a real fetch
+            return mockResponse;
+        } else {
+             // Real fetch call would look like this:
+            try {
+                const response = await fetch('/api/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pinCode, disease, days, currentCases: currentCases || null })
+                });
+                if (!response.ok) throw new Error('API response error');
+                const result = await response.json();
+                if (!result.success) throw new Error(result.error || 'Prediction failed');
+                return result;
+            } catch (error) {
+                console.error('Error calling ML API:', error);
+                throw new Error('Failed to get prediction from AI engine');
+            }
+        }
+    }
+
+    async function generatePrediction() {
+        const predictBtn = document.getElementById('predictBtn');
+        predictBtn.disabled = true;
+        predictBtn.innerHTML = `
+            <span class="flex items-center justify-center">
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Processing with AI...
+            </span>`;
+        
+        try {
+            const userCases = document.getElementById('currentCases').value;
+            const casesValue = userCases && userCases > 0 ? parseInt(userCases) : null;
+            
+            const result = await callMLPredictionAPI(
+                currentPinCode, 
+                selectedDisease, 
+                currentDays,
+                casesValue
+            );
+            
+            displayPredictionResults(result.data);
+        } catch (error) {
+            alert(error.message || 'Error generating prediction. Please try again.');
+            console.error('Prediction error:', error);
+        } finally {
+            predictBtn.disabled = false;
+            predictBtn.innerHTML = '🔮 Generate Prediction';
+        }
+    }
+
+    function displayPredictionResults(predictionData) {
+        const resultsSection = document.getElementById('resultsSection');
+        resultsSection.classList.remove('hidden');
+        resultsSection.scrollIntoView({ behavior: 'smooth' });
+
+        const areaData = pinCodeData[currentPinCode] || {
+            area: 'Sample Area',
+            city: 'Sample City',
+            state: 'Sample State',
+            population: 35000,
+            district: 'N/A',
+            coordinates: 'N/A',
+            waterSources: 'N/A',
+            riskFactors: 'N/A'
+        };
+
+        document.getElementById('areaDetails').innerHTML = `
+            <div class="bg-blue-50 p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Area & District</div>
+                <div class="font-semibold text-gray-800">${areaData.area}</div>
+                <div class="text-xs text-gray-500">${areaData.district}</div>
+            </div>
+            <div class="bg-green-50 p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Location</div>
+                <div class="font-semibold text-gray-800">${areaData.city}, ${areaData.state}</div>
+                <div class="text-xs text-gray-500">${areaData.coordinates}</div>
+            </div>
+            <div class="bg-purple-50 p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Population</div>
+                <div class="font-semibold text-gray-800">${areaData.population.toLocaleString()}</div>
+            </div>
+            <div class="bg-yellow-50 p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Water Sources</div>
+                <div class="font-semibold text-gray-800 text-sm">${areaData.waterSources}</div>
+            </div>
+            <div class="bg-red-50 p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Risk Factors</div>
+                <div class="font-semibold text-gray-800 text-sm">${areaData.riskFactors}</div>
+            </div>
+        `;
+
+        const riskColor = predictionData.riskLevel === 'High' ? 'red' : 
+                         predictionData.riskLevel === 'Medium' ? 'yellow' : 'green';
+
+        document.getElementById('predictionResults').innerHTML = `
+            <div class="bg-blue-50 p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Current Cases</div>
+                <div class="text-2xl font-bold text-blue-600">${predictionData.currentCases}</div>
+            </div>
+            <div class="bg-orange-50 p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Predicted Cases (${currentDays} days)</div>
+                <div class="text-2xl font-bold text-orange-600">${predictionData.predictedCases}</div>
+            </div>
+            <div class="bg-${riskColor}-50 p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Risk Level</div>
+                <div class="text-2xl font-bold text-${riskColor}-600">${predictionData.riskLevel}</div>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <div class="text-sm text-gray-600">Daily Growth Rate</div>
+                <div class="text-2xl font-bold text-gray-600">${predictionData.dailyGrowthRate}%</div>
+            </div>
+        `;
+        fetchPatientStats(predictionData.currentCases);
+    }
+
+    function fetchPatientStats(currentCases) {
+        // Mock patient stats based on current cases
+        const active = currentCases;
+        const recovered = Math.floor(active * (Math.random() * 1.5 + 2)); // Recovered are 2x-3.5x active
+        const critical = Math.floor(active * (Math.random() * 0.05 + 0.02)); // 2-7% are critical
+        const stats = {
+            active: active,
+            recovered: recovered,
+            critical: critical,
+            averageAge: (Math.random() * 10 + 25).toFixed(1) // Avg age between 25 and 35
+        };
+        
+        document.getElementById('patientStats').innerHTML = `
+            <div class="flex justify-between py-2 border-b">
+                <span class="text-gray-600">Active Patients:</span>
+                <span class="font-semibold">${stats.active}</span>
+            </div>
+            <div class="flex justify-between py-2 border-b">
+                <span class="text-gray-600">Recovered:</span>
+                <span class="font-semibold text-green-600">${stats.recovered}</span>
+            </div>
+            <div class="flex justify-between py-2 border-b">
+                <span class="text-gray-600">Critical:</span>
+                <span class="font-semibold text-red-600">${stats.critical}</span>
+            </div>
+            <div class="flex justify-between py-2">
+                <span class="text-gray-600">Avg Age:</span>
+                <span class="font-semibold">${stats.averageAge} years</span>
+            </div>
+        `;
+    }
+
+    function accessPatientData(dataType) {
+        const modal = document.getElementById('patientModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+        let title = '';
+        let content = '';
+
+        switch(dataType) {
+            case 'demographics':
+                title = '📋 Patient Demographics Data';
+                content = `
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded">
+                            <h4 class="font-semibold mb-2">Age Distribution</h4>
+                            <div class="space-y-1 text-sm">
+                                <div class="flex justify-between"><span>0-18 years:</span><span>15%</span></div>
+                                <div class="flex justify-between"><span>19-35 years:</span><span>35%</span></div>
+                                <div class="flex justify-between"><span>36-60 years:</span><span>40%</span></div>
+                                <div class="flex justify-between"><span>60+ years:</span><span>10%</span></div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded">
+                            <h4 class="font-semibold mb-2">Gender Distribution</h4>
+                            <div class="space-y-1 text-sm">
+                                <div class="flex justify-between"><span>Male:</span><span>52%</span></div>
+                                <div class="flex justify-between"><span>Female:</span><span>48%</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4">⚠️ Demo Data - This is sample patient demographic information for demonstration purposes.</p>
+                `;
+                break;
+            case 'symptoms':
+                title = '🩺 Symptoms Analysis';
+                content = `
+                    <div class="space-y-4">
+                        <div class="bg-red-50 p-4 rounded">
+                            <h4 class="font-semibold text-red-800 mb-2">Most Common Symptoms</h4>
+                            <div class="grid grid-cols-2 gap-2 text-sm">
+                                <div>• Diarrhea (92%)</div>
+                                <div>• Vomiting (85%)</div>
+                                <div>• Dehydration (78%)</div>
+                                <div>• Fever (65%)</div>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 p-4 rounded">
+                            <h4 class="font-semibold text-yellow-800 mb-2">Severity Distribution</h4>
+                            <div class="space-y-1 text-sm">
+                                <div class="flex justify-between"><span>Mild:</span><span>70%</span></div>
+                                <div class="flex justify-between"><span>Moderate:</span><span>25%</span></div>
+                                <div class="flex justify-between"><span>Severe:</span><span>5%</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4">⚠️ Demo Data - This is sample symptoms analysis for demonstration purposes.</p>
+                `;
+                break;
+            case 'treatment':
+                title = '💊 Treatment Records';
+                content = `
+                    <div class="space-y-4">
+                        <div class="bg-green-50 p-4 rounded">
+                            <h4 class="font-semibold text-green-800 mb-2">Treatment Protocols</h4>
+                            <div class="text-sm space-y-1">
+                                <div>• Oral Rehydration Solution (ORS): 95%</div>
+                                <div>• IV Fluids: 20%</div>
+                                <div>• Antibiotics: 40%</div>
+                                <div>• Hospitalization: 10%</div>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded">
+                            <h4 class="font-semibold text-blue-800 mb-2">Recovery Rates</h4>
+                            <div class="text-sm space-y-1">
+                                <div>• Average recovery time: 5-10 days</div>
+                                <div>• Full recovery rate: 98%</div>
+                                <div>• Readmission rate: 1.5%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4">⚠️ Demo Data - This is sample treatment data for demonstration purposes.</p>
+                `;
+                break;
+        }
+
+        modalTitle.textContent = title;
+        modalContent.innerHTML = content;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('patientModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    document.getElementById('patientModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+</script>
+</body>
+</html>

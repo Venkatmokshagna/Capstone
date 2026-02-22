@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Enhanced SEO Meta Tags -->
+    <meta name="description"
+        content="Samaj Health Suraksha Login Portal - Smart Community Health Monitoring and Early Warning System for Water-Borne Diseases in Rural Northeast India">
+    <meta name="keywords"
+        content="samaj health suraksha, samaj health suraksha login portal, waterborne disease monitoring, community health, northeast india, health initiative, asha workers, rural health, disease prevention">
+    <meta name="author" content="Samaj Health Suraksha">
+    <meta name="robots" content="index, follow">
+
+    <!-- Google Site Verification -->
+    <meta name="google-site-verification" content="t0UhZRKIcpFR7EGiSO5hiUyIORZnqk-4w64RzYoybwg" />
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="SAMAJ HEALTH SURAKSHA - Login Portal">
+    <meta property="og:description" content="Early Warning System for Water-Borne Diseases in Rural Northeast India">
+    <meta property="og:url" content="https://waterbornedisease-production.up.railway.app/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Samaj Health Suraksha">
+
+    <title>SAMAJ HEALTH SURAKSHA - Login Portal</title>
+
+    <!-- REMOVED ALL REDIRECTS - They were causing infinite loops -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="min-h-screen theme-transition gradient-bg">
+    <!-- Redirect Message (only shows if JavaScript is disabled) -->
+    <noscript>
+        <div
+            style="text-align: center; padding: 100px; font-family: Arial, sans-serif; color: white; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 20px;">Samaj Health Suraksha</h1>
+            <p style="font-size: 1.2rem; margin-bottom: 30px;">JavaScript is required for redirection.</p>
+            <a href="https://waterbornedisease-production.up.railway.app/"
+                style="background: white; color: #667eea; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                Go to Samaj Health Suraksha Login Portal
+            </a>
+        </div>
+    </noscript>
+
+    <header class="relative z-30 p-6">
+        <div class="container mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-4 animate-slide-in-left">
+                <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center floating-animation">
+                    <i data-lucide="heart-pulse" class="w-6 h-6 text-white"></i>
+                </div>
+                <div>
+                    <h1 id="header-title" class="text-xl font-bold text-white">
+                        SAMAJ HEALTH SURAKSHA
+                    </h1>
+                    <p id="header-subtitle" class="text-white/80 text-sm">
+                        Northeast India Health Initiative
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4 animate-slide-in-right">
+                <!-- Awareness Button -->
+                <button id="awareness-btn"
+                    class="flex items-center gap-2 px-3 py-2 rounded-lg awareness-btn text-white transition-all duration-300">
+                    <i data-lucide="lightbulb" class="w-4 h-4"></i>
+                    <span>Awareness</span>
+                </button>
+
+                <div class="language-selector">
+                    <button id="language-btn"
+                        class="flex items-center gap-2 px-3 py-2 bg-white/20 rounded-lg hover:bg-white/30 transition-all duration-300 text-white">
+                        <i data-lucide="globe" class="w-4 h-4"></i>
+                        <span id="current-language">English</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                    <div id="language-dropdown" class="language-dropdown">
+                        <div class="p-2">
+                            <button
+                                class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm language-option"
+                                data-lang="en">English</button>
+                            <button
+                                class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm language-option"
+                                data-lang="as">অসমীয়া (Assamese)</button>
+                            <button
+                                class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm language-option"
+                                data-lang="bn">বাংলা (Bengali)</button>
+                            <button
+                                class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-sm language-option"
+                                data-lang="hi">हिंदी (Hindi)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="theme-toggle"
+                    class="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-all duration-300 hover:scale-110">
+                    <i data-lucide="sun" class="w-5 h-5 text-white"></i>
+                </button>
+
+                <button id="help-btn"
+                    class="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-all duration-300 hover:scale-110">
+                    <i data-lucide="help-circle" class="w-5 h-5 text-white"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <section class="text-center mb-16 animate-fade-in">
+            <div class="max-w-4xl mx-auto">
+                <h1 id="main-heading" class="text-4xl md:text-6xl font-bold text-white mb-6">
+                    SAMAJ HEALTH SURAKSHA
+                    <span class="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-pink-300">
+                        Monitoring System
+                    </span>
+                </h1>
+                <p id="sub-heading" class="text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
+                    Early Warning System for Water-Borne Diseases in Rural Northeast India
+                </p>
+                <div id="tagline"
+                    class="text-lg text-white/80 typing-animation overflow-hidden whitespace-nowrap mx-auto">
+                    Protecting Communities • Preventing Disease • Promoting Health
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <div class="text-center mb-12">
+                <h2 id="choose-role-heading" class="text-3xl font-bold text-white mb-4">Choose Your Role</h2>
+                <p id="role-description" class="text-white/80 text-lg">Select your role to access the appropriate
+                    dashboard and tools</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+                <div class="login-card glass-effect rounded-2xl p-8 text-center card-hover animate-fade-in stagger-animation"
+                    style="--delay: 0.2s;">
+                    <div class="role-icon asha-gradient">
+                        <i data-lucide="user-check" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <!-- Asha worker section -->
+                    <h3 data-role-title="asha" class="text-2xl font-bold text-gray-900 dark:text-white mb-3">ASHA Worker
+                    </h3>
+                    <p data-role-desc="asha" class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                        Access health monitoring tools, community data, and coordinate with volunteers for disease
+                        prevention and health awareness.
+                    </p>
+                    <div class="space-y-2 mb-6 text-left">
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i
+                                data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span
+                                data-role-item="asha-1">Health Data Management</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i
+                                data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span
+                                data-role-item="asha-2">Community Coordination</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i
+                                data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span
+                                data-role-item="asha-3">Emergency Response</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i
+                                data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span
+                                data-role-item="asha-4">Training Resources</span></div>
+                    </div>
+                    <button
+                        class="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-medium transform hover:scale-105 pulse-glow"
+                        onclick="showLoginModal('asha')">
+                        <i data-lucide="log-in" class="w-4 h-4 inline mr-2"></i><span data-role-button="asha">Login as
+                            ASHA Worker</span>
+                    </button>
+                </div>
+
+                <div class="login-card glass-effect rounded-2xl p-8 text-center card-hover animate-fade-in stagger-animation"
+                    style="--delay: 0.4s;">
+                    <div class="role-icon volunteer-gradient">
+                        <i data-lucide="users" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <!-- community volunteer section -->
+                    <h3 data-role-title="volunteer" class="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                        Community Volunteer</h3>
+                    <p data-role-desc="volunteer" class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                        Report water sources, conduct awareness campaigns, collect community feedback, and communicate
+                        with ASHA workers.
+                    </p>
+                    <div class="space-y-2 mb-6 text-left">
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i
+                                data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span
+                                data-role-item="volunteer-1">Water Source Reporting</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i
+                                data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span
+                                data-role-item="volunteer-2">Awareness Campaigns</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i
+                                data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span
+                                data-role-item="volunteer-3">Community Feedback</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i
+                                data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span
+                                data-role-item="volunteer-4">Direct Communication</span></div>
+                    </div>
+                    <button
+                        class="w-full px-6 py-3 bg-gradient-to-r from-pink-600 to-red-600 text-white rounded-xl hover:from-pink-700 hover:to-red-700 transition-all duration-300 font-medium transform hover:scale-105 pulse-glow"
+                        onclick="showLoginModal('volunteer')">
+                        <i data-lucide="log-in" class="w-4 h-4 inline mr-2"></i><span data-role-button="volunteer">Login
+                            as Volunteer</span>
+                    </button>
+                </div>
+
+                <div class="login-card glass-effect rounded-2xl p-8 text-center card-hover animate-fade-in stagger-animation"
+                    style="--delay: 0.6s;">
+                    <div class="role-icon admin-gradient">
+                        <i data-lucide="shield-check" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <!-- health administrator section -->
+                    <h3 data-role-title="admin" class="text-2xl font-bold text-gray-900 dark:text-white mb-3">Health
+                        Administrator</h3>
+                    <p data-role-desc="admin" class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                        Monitor district-wide health data, manage resources, coordinate responses, and oversee system
+                        operations.
+                    </p>
+                    <div class="space-y-2 mb-6 text-left">
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i
+                                data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span
+                                data-role-item="admin-1">District-wide Analytics</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i
+                                data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span
+                                data-role-item="admin-2">Resource Management</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i
+                                data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span
+                                data-role-item="admin-3">Policy Implementation</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i
+                                data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span
+                                data-role-item="admin-4">System Administration</span></div>
+                    </div>
+                    <button
+                        class="w-full px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl hover:from-cyan-700 hover:to-blue-700 transition-all duration-300 font-medium transform hover:scale-105 pulse-glow"
+                        onclick="showLoginModal('admin')">
+                        <i data-lucide="log-in" class="w-4 h-4 inline mr-2"></i><span data-role-button="admin">Login as
+                            Administrator</span>
+                    </button>
+                </div>
+
+                <div class="login-card glass-effect rounded-2xl p-8 text-center card-hover animate-fade-in stagger-animation"
+                    style="--delay: 0.8s;">
+                    <div class="role-icon patient-gradient">
+                        <i data-lucide="user" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <!-- patient section -->
+                    <h3 data-role-title="patient" class="text-2xl font-bold text-gray-900 dark:text-white mb-3">Patient
+                    </h3>
+                    <p data-role-desc="patient" class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                        Access your health records, report symptoms, view test results, and communicate with healthcare
+                        providers.
+                    </p>
+                    <div class="space-y-2 mb-6 text-left">
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i
+                                data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span
+                                data-role-item="patient-1">Health Record Access</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i
+                                data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span
+                                data-role-item="patient-2">Symptom Reporting</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i
+                                data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span
+                                data-role-item="patient-3">Test Results</span></div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300"><i
+                                data-lucide="check-circle" class="w-4 h-4 text-green-500"></i><span
+                                data-role-item="patient-4">Provider Communication</span></div>
+                    </div>
+                    <button
+                        class="w-full px-6 py-3 bg-gradient-to-r from-green-600 to-teal-600 text-white rounded-xl hover:from-green-700 hover:to-teal-700 transition-all duration-300 font-medium transform hover:scale-105 pulse-glow"
+                        onclick="showLoginModal('patient')">
+                        <i data-lucide="log-in" class="w-4 h-4 inline mr-2"></i><span data-role-button="patient">Login
+                            as Patient</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-16 animate-fade-in">
+            <div class="text-center mb-12">
+                <h2 id="features-title" class="text-3xl font-bold text-white mb-4">System Features</h2>
+                <p id="features-description" class="text-white/80 text-lg">Comprehensive tools for community health
+                    monitoring and disease prevention</p>
+            </div>
+
+            <div class="feature-grid max-w-6xl mx-auto">
+                <div class="feature-card animate-fade-in stagger-animation" style="--delay: 0.1s;">
+                    <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-4"><i
+                            data-lucide="droplets" class="w-6 h-6 text-blue-300"></i></div>
+                    <h3 data-feature-title="1" class="text-lg font-semibold text-white mb-2">Water Quality Monitoring
+                    </h3>
+                    <p data-feature-desc="1" class="text-white/70 text-sm">Real-time tracking and reporting of water
+                        source safety across communities</p>
+                </div>
+                <div class="feature-card animate-fade-in stagger-animation" style="--delay: 0.2s;">
+                    <div class="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center mx-auto mb-4"><i
+                            data-lucide="alert-triangle" class="w-6 h-6 text-red-300"></i></div>
+                    <h3 data-feature-title="2" class="text-lg font-semibold text-white mb-2">Early Warning System</h3>
+                    <p data-feature-desc="2" class="text-white/70 text-sm">Automated alerts for disease outbreaks and
+                        contamination events</p>
+                </div>
+                <div class="feature-card animate-fade-in stagger-animation" style="--delay: 0.3s;">
+                    <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mx-auto mb-4"><i
+                            data-lucide="users" class="w-6 h-6 text-green-300"></i></div>
+                    <h3 data-feature-title="3" class="text-lg font-semibold text-white mb-2">Community Engagement</h3>
+                    <p data-feature-desc="3" class="text-white/70 text-sm">Tools for awareness campaigns and community
+                        feedback collection</p>
+                </div>
+                <div class="feature-card animate-fade-in stagger-animation" style="--delay: 0.4s;">
+                    <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mx-auto mb-4"><i
+                            data-lucide="bar-chart-3" class="w-6 h-6 text-purple-300"></i></div>
+                    <h3 data-feature-title="4" class="text-lg font-semibold text-white mb-2">Data Analytics</h3>
+                    <p data-feature-desc="4" class="text-white/70 text-sm">Comprehensive health data analysis and trend
+                        identification</p>
+                </div>
+                <div class="feature-card animate-fade-in stagger-animation" style="--delay: 0.5s;">
+                    <div class="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center mx-auto mb-4"><i
+                            data-lucide="smartphone" class="w-6 h-6 text-yellow-300"></i></div>
+                    <h3 data-feature-title="5" class="text-lg font-semibold text-white mb-2">Mobile Accessibility</h3>
+                    <p data-feature-desc="5" class="text-white/70 text-sm">Responsive design for access on any device,
+                        anywhere</p>
+                </div>
+                <div class="feature-card animate-fade-in stagger-animation" style="--delay: 0.6s;">
+                    <div class="w-12 h-12 bg-indigo-500/20 rounded-lg flex items-center justify-center mx-auto mb-4"><i
+                            data-lucide="globe" class="w-6 h-6 text-indigo-300"></i></div>
+                    <h3 data-feature-title="6" class="text-lg font-semibold text-white mb-2">Multi-language Support</h3>
+                    <p data-feature-desc="6" class="text-white/70 text-sm">Available in local languages for better
+                        community reach</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center py-8 text-white/70">
+        <div class="container mx-auto px-6">
+            <p class="mb-2">© 2025 Smart Community Health Monitoring System</p>
+            <p class="text-sm">Developed By AJU Students for Rural Northeast India • Protecting Communities Through
+                Technology</p>
+            <div class="flex justify-center gap-4 mt-4">
+                <button class="hover:text-white transition-colors">Privacy Policy</button>
+                <button class="hover:text-white transition-colors">Terms of Service</button>
+                <button class="hover:text-white transition-colors">Contact Support</button>
+            </div>
+        </div>
+    </footer>
+
+    <div id="login-modal" class="hidden fixed inset-0 modal-backdrop flex items-center justify-center p-4 z-50">
+        <div class="glass-effect bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full modal-enter">
+            <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white" id="modal-title">Login</h3>
+                <button id="close-modal"
+                    class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <i data-lucide="x" class="w-5 h-5 text-gray-500 dark:text-gray-400"></i>
+                </button>
+            </div>
+            <div class="p-6" id="modal-content">
+                <!-- Modal content will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <div id="success-modal" class="hidden fixed inset-0 modal-backdrop flex items-center justify-center p-4 z-50">
+        <div class="glass-effect bg-white dark:bg-gray-800 rounded-2xl max-w-sm w-full modal-enter text-center p-8">
+            <div
+                class="w-16 h-16 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="check" class="w-8 h-8 text-green-600 dark:text-green-400 success-checkmark"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Login Successful!</h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-6">Redirecting to your dashboard...</p>
+            <div class="flex justify-center">
+                <div class="loading-spinner w-6 h-6 border-2 border-gray-300 border-t-blue-600 rounded-full"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced login form handler
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize Lucide icons
+            lucide.createIcons();
+
+            // --- HEADER BUTTONS FUNCTIONALITY ---
+
+            // 1. Awareness Button
+            const awarenessBtn = document.getElementById('awareness-btn');
+            if (awarenessBtn) {
+                awarenessBtn.addEventListener('click', () => {
+                    window.location.href = 'awareness.html';
+                });
+            }
+
+            // 2. Language Selector
+            const languageBtn = document.getElementById('language-btn');
+            const languageDropdown = document.querySelector('.language-dropdown');
+            const currentLanguageSpan = document.getElementById('current-language');
+
+            // Translation Dictionary
+            const translations = {
+                en: {
+                    headerTitle: "SAMAJ HEALTH SURAKSHA",
+                    headerSubtitle: "Northeast India Health Initiative",
+                    awarenessBtn: "Awareness",
+                    mainHeading: "SAMAJ HEALTH SURAKSHA",
+                    mainHeadingSpan: "Monitoring System",
+                    subHeading: "Early Warning System for Water-Borne Diseases in Rural Northeast India",
+                    tagline: "Protecting Communities • Preventing Disease • Promoting Health",
+                    chooseRoleHeading: "Choose Your Role",
+                    roleDescription: "Select your role to access the appropriate dashboard and tools",
+                    ashaTitle: "ASHA Worker",
+                    ashaDesc: "Access health monitoring tools, community data, and coordinate with volunteers for disease prevention and health awareness.",
+                    ashaBtn: "Login as ASHA Worker",
+                    volunteerTitle: "Community Volunteer",
+                    volunteerDesc: "Report water sources, conduct awareness campaigns, collect community feedback, and communicate with ASHA workers.",
+                    volunteerBtn: "Login as Volunteer",
+                    adminTitle: "Health Administrator",
+                    adminDesc: "Monitor district-wide health data, manage resources, coordinate responses, and oversee system operations.",
+                    adminBtn: "Login as Administrator",
+                    patientTitle: "Patient",
+                    patientDesc: "Access your health records, report symptoms, view test results, and communicate with healthcare providers.",
+                    patientBtn: "Login as Patient",
+                    featuresTitle: "System Features",
+                    featuresDescription: "Comprehensive tools for community health monitoring and disease prevention"
+                },
+                hi: {
+                    headerTitle: "समाज स्वास्थ्य सुरक्षा",
+                    headerSubtitle: "पूर्वोत्तर भारत स्वास्थ्य पहल",
+                    awarenessBtn: "जागरूकता",
+                    mainHeading: "समाज स्वास्थ्य सुरक्षा",
+                    mainHeadingSpan: "निगरानी प्रणाली",
+                    subHeading: "ग्रामीण पूर्वोत्तर भारत में जलजनित रोगों के लिए प्रारंभिक चेतावनी प्रणाली",
+                    tagline: "समुदायों की सुरक्षा • बीमारी की रोकथाम • स्वास्थ्य को बढ़ावा देना",
+                    chooseRoleHeading: "अपनी भूमिका चुनें",
+                    roleDescription: "डैशबोर्ड और टूल तक पहुंचने के लिए अपनी भूमिका का चयन करें",
+                    ashaTitle: "आशा कार्यकर्ता",
+                    ashaDesc: "स्वास्थ्य निगरानी उपकरण, सामुदायिक डेटा तक पहुंचें, और बीमारी की रोकथाम और स्वास्थ्य जागरूकता के लिए स्वयंसेवकों के साथ समन्वय करें।",
+                    ashaBtn: "आशा कार्यकर्ता के रूप में लॉगिन करें",
+                    volunteerTitle: "सामुदायिक स्वयंसेवक",
+                    volunteerDesc: "जल स्रोतों की रिपोर्ट करें, जागरूकता अभियान चलाएं, सामुदायिक प्रतिक्रिया एकत्र करें, और आशा कार्यकर्ताओं के साथ संवाद करें।",
+                    volunteerBtn: "स्वयंसेवक के रूप में लॉगिन करें",
+                    adminTitle: "स्वास्थ्य प्रशासक",
+                    adminDesc: "जिला-व्यापी स्वास्थ्य डेटा की निगरानी करें, संसाधनों का प्रबंधन करें, प्रतिक्रियाओं का समन्वय करें, और सिस्टम संचालन की देखरेख करें।",
+                    adminBtn: "प्रशासक के रूप में लॉगिन करें",
+                    patientTitle: "रोगी",
+                    patientDesc: "अपने स्वास्थ्य रिकॉर्ड तक पहुंचें, लक्षणों की रिपोर्ट करें, परीक्षण परिणाम देखें, और स्वास्थ्य सेवा प्रदाताओं के साथ संवाद करें।",
+                    patientBtn: "रोगी के रूप में लॉगिन करें",
+                    featuresTitle: "प्रणाली की विशेषताएं",
+                    featuresDescription: "सामुदायिक स्वास्थ्य निगरानी और रोग रोकथाम के लिए व्यापक उपकरण"
+                },
+                as: {
+                    headerTitle: "সমাজ স্বাস্থ্য সুৰক্ষা",
+                    headerSubtitle: "উত্তৰ-পূব ভাৰত স্বাস্থ্য পদক্ষেপ",
+                    awarenessBtn: "সজাগতা",
+                    mainHeading: "সমাজ স্বাস্থ্য সুৰক্ষা",
+                    mainHeadingSpan: "নিৰীক্ষণ প্ৰণালী",
+                    subHeading: "গ্ৰাম্য উত্তৰ-পূব ভাৰতত জলবাহিত ৰোগৰ বাবে আগতীয়া সতৰ্কবাণী প্ৰণালী",
+                    tagline: "সম্প্ৰদায়ৰ সুৰক্ষা • ৰোগ প্ৰতিৰোধ • স্বাস্থ্যৰ প্ৰচাৰ",
+                    chooseRoleHeading: "আপোনাৰ ভূমিকা বাছনি কৰক",
+                    roleDescription: "উপযুক্ত ডেশ্ববৰ্ড আৰু সঁজুলিসমূহ প্ৰৱেশ কৰিবলৈ আপোনাৰ ভূমিকা নিৰ্বাচন কৰক",
+                    ashaTitle: "আশা কৰ্মী",
+                    ashaDesc: "স্বাস্থ্য নিৰীক্ষণ সঁজুলি, সম্প্ৰদায়ৰ তথ্যৰ প্ৰৱেশাধিকাৰ লাভ কৰক, আৰু ৰোগ প্ৰতিৰোধ আৰু স্বাস্থ্য সজাগতাৰ বাবে স্বেচ্ছাসেৱকৰ সৈতে সমন্বয় কৰক।",
+                    ashaBtn: "আশা কৰ্মী হিচাপে লগইন কৰক",
+                    volunteerTitle: "সম্প্ৰদায় স্বেচ্ছাসেৱক",
+                    volunteerDesc: " পানীৰ উৎসৰ প্ৰতিবেদন দিয়ক, সজাগতা অভিযান চলাওক, সম্প্ৰদায়ৰ মতামত সংগ্ৰহ কৰক, আৰু আশা কৰ্মীৰ সৈতে যোগাযোগ কৰক।",
+                    volunteerBtn: "স্বেচ্ছাসেৱক হিচাপে লগইন কৰক",
+                    adminTitle: "স্বাস্থ্য প্ৰশাসক",
+                    adminDesc: "জিলা-ব্যাপী স্বাস্থ্য তথ্য নিৰীক্ষণ কৰক, সম্পদ ব্যৱস্থাপনা কৰক, প্ৰতিক্ৰিয়া সমন্বয় কৰক, আৰু প্ৰণালীৰ কাম-কাজ তদাৰক কৰক।",
+                    adminBtn: "প্ৰশাসক হিচাপে লগইন কৰক",
+                    patientTitle: "ৰোগী",
+                    patientDesc: "আপোনাৰ স্বাস্থ্যৰ তথ্য প্ৰৱেশ কৰক, লক্ষণসমূহ জনাওক, পৰীক্ষাৰ ফলাফল চাওক, আৰু স্বাস্থ্যসেৱা প্ৰদানকাৰীৰ সৈতে যোগাযোগ কৰক।",
+                    patientBtn: "ৰোগী হিচাপে লগইন কৰক",
+                    featuresTitle: "প্ৰণালীৰ বৈশিষ্ট্যসমূহ",
+                    featuresDescription: "সম্প্ৰদায় স্বাস্থ্য নিৰীক্ষণ আৰু ৰোগ প্ৰতিৰোধৰ বাবে ব্যাপক সঁজুলি"
+                },
+                bn: {
+                    headerTitle: "সমাজ স্বাস্থ্য সুরক্ষা",
+                    headerSubtitle: "উত্তর-পূর্ব ভারত স্বাস্থ্য উদ্যোগ",
+                    awarenessBtn: "সচেতনতা",
+                    mainHeading: "সমাজ স্বাস্থ্য সুরক্ষা",
+                    mainHeadingSpan: "মনিটরিং সিস্টেম",
+                    subHeading: "গ্রামীণ উত্তর-পূর্ব ভারতে জলবাহিত রোগের জন্য প্রাথমিক সতর্কতা ব্যবস্থা",
+                    tagline: "সম্প্রদায় সুরক্ষা • রোগ প্রতিরোধ • স্বাস্থ্য প্রচার",
+                    chooseRoleHeading: "আপনার ভূমিকা চয়ন করুন",
+                    roleDescription: "উপযুক্ত ড্যাশবোর্ড এবং সরঞ্জামগুলি অ্যাক্সেস করতে আপনার ভূমিকা নির্বাচন করুন",
+                    ashaTitle: "আশা কর্মী",
+                    ashaDesc: "স্বাস্থ্য পর্যবেক্ষণ সরঞ্জাম, সম্প্রদায়ের ডেটা অ্যাক্সেস করুন এবং রোগ প্রতিরোধ এবং স্বাস্থ্য সচেতনতার জন্য স্বেচ্ছাসেবকদের সাথে সমন্বয় করুন।",
+                    ashaBtn: "আশা কর্মী হিসেবে লগইন করুন",
+                    volunteerTitle: "কমিউনিটি স্বেচ্ছাসেবক",
+                    volunteerDesc: "জলের উৎসের প্রতিবেদন করুন, সচেতনতা প্রচার চালান, সম্প্রদায়ের প্রতিক্রিয়া সংগ্রহ করুন এবং আশা কর্মীদের সাথে যোগাযোগ করুন।",
+                    volunteerBtn: "স্বেচ্ছাসেবক হিসেবে লগইন করুন",
+                    adminTitle: "স্বাস্থ্য প্রশাসক",
+                    adminDesc: "জেলা-ব্যাপী স্বাস্থ্য ডেটা মনিটর করুন, সম্পদ পরিচালনা করুন, প্রতিক্রিয়া সমন্বয় করুন এবং সিস্টেম অপারেশন তদারকি করুন।",
+                    adminBtn: "প্রশাসক হিসেবে লগইন করুন",
+                    patientTitle: "রোগী",
+                    patientDesc: "আপনার স্বাস্থ্য রেকর্ড অ্যাক্সেস করুন, লক্ষণ রিপোর্ট করুন, পরীক্ষার ফলাফল দেখুন এবং স্বাস্থ্যসেবা প্রদানকারীদের সাথে যোগাযোগ করুন।",
+                    patientBtn: "রোগী হিসেবে লগইন করুন",
+                    featuresTitle: "সিস্টেমের বৈশিষ্ট্য",
+                    featuresDescription: "কমিউনিটি স্বাস্থ্য পর্যবেক্ষণ এবং রোগ প্রতিরোধের জন্য ব্যাপক সরঞ্জাম"
+                }
+            };
+
+            function updatePageContent(lang) {
+                const t = translations[lang] || translations['en'];
+
+                // Helper to safely setText
+                const setText = (id, text) => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = text;
+                };
+
+                // Helper to safely set innerHTML (for spans inside headings)
+                const setHTML = (id, html) => {
+                    const el = document.getElementById(id);
+                    if (el) el.innerHTML = html;
+                };
+
+                setText('header-title', t.headerTitle);
+                setText('header-subtitle', t.headerSubtitle);
+
+                // Update Awareness Button text node only (keep icon)
+                const awarenessBtnEl = document.getElementById('awareness-btn');
+                if (awarenessBtnEl) {
+                    const span = awarenessBtnEl.querySelector('span');
+                    if (span) span.textContent = t.awarenessBtn;
+                }
+
+                // Main Heading with span
+                const mainHeading = document.getElementById('main-heading');
+                if (mainHeading) {
+                    // Update the text node before the span
+                    mainHeading.firstChild.textContent = t.mainHeading + " ";
+                    const span = mainHeading.querySelector('span');
+                    if (span) span.textContent = t.mainHeadingSpan;
+                }
+
+                setText('sub-heading', t.subHeading);
+                setText('tagline', t.tagline);
+                setText('choose-role-heading', t.chooseRoleHeading);
+                setText('role-description', t.roleDescription);
+                setText('features-title', t.featuresTitle);
+                setText('features-description', t.featuresDescription);
+
+                // Update Role Cards (using data attributes or specific selectors)
+                const updateRoleCard = (role, title, desc, btnText) => {
+                    const titleEl = document.querySelector(`h3[data-role-title="${role}"]`);
+                    const descEl = document.querySelector(`p[data-role-desc="${role}"]`);
+                    const btnSpan = document.querySelector(`span[data-role-button="${role}"]`);
+
+                    if (titleEl) titleEl.textContent = title;
+                    if (descEl) descEl.textContent = desc;
+                    if (btnSpan) btnSpan.textContent = btnText;
+                };
+
+                updateRoleCard('asha', t.ashaTitle, t.ashaDesc, t.ashaBtn);
+                updateRoleCard('volunteer', t.volunteerTitle, t.volunteerDesc, t.volunteerBtn);
+                updateRoleCard('admin', t.adminTitle, t.adminDesc, t.adminBtn);
+                updateRoleCard('patient', t.patientTitle, t.patientDesc, t.patientBtn);
+
+                // Update Current Language Display
+                const langNames = {
+                    en: 'English',
+                    as: 'অসমীয়া',
+                    bn: 'বাংলা',
+                    hi: 'हिंदी'
+                };
+                if (currentLanguageSpan) {
+                    currentLanguageSpan.textContent = langNames[lang] || 'English';
+                }
+            }
+
+            if (languageBtn && languageDropdown) {
+                languageBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    languageDropdown.classList.toggle('show');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!languageBtn.contains(e.target) && !languageDropdown.contains(e.target)) {
+                        languageDropdown.classList.remove('show');
+                    }
+                });
+
+                // Handle language selection
+                const languageOptions = document.querySelectorAll('.language-option');
+                languageOptions.forEach(option => {
+                    option.addEventListener('click', () => {
+                        const langCode = option.getAttribute('data-lang');
+
+                        console.log(`Language changed to: ${langCode}`);
+                        localStorage.setItem('preferredLanguage', langCode);
+
+                        // Update content
+                        updatePageContent(langCode);
+
+                        languageDropdown.classList.remove('show');
+                    });
+                });
+
+                // Initialize with saved language
+                const savedLang = localStorage.getItem('preferredLanguage');
+                if (savedLang && translations[savedLang]) {
+                    updatePageContent(savedLang);
+                    console.log('Restored saved language:', savedLang);
+                } else {
+                    // Default to English if no saved language or invalid saved language
+                    updatePageContent('en');
+                }
+            }
+
+            // 3. Theme Toggle
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const themeIcon = themeToggleBtn ? themeToggleBtn.querySelector('i') : null;
+
+            // Check saved theme
+            if (localStorage.getItem('theme') === 'dark' ||
+                (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                if (themeIcon) {
+                    themeIcon.setAttribute('data-lucide', 'moon');
+                    lucide.createIcons();
+                }
+            }
+
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', () => {
+                    document.documentElement.classList.toggle('dark');
+                    const isDark = document.documentElement.classList.contains('dark');
+
+                    // Update icon
+                    if (themeIcon) {
+                        themeIcon.setAttribute('data-lucide', isDark ? 'moon' : 'sun');
+                        lucide.createIcons();
+                    }
+
+                    // Save preference
+                    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                });
+            }
+
+            // 4. Help Button
+            const helpBtn = document.getElementById('help-btn');
+            if (helpBtn) {
+                helpBtn.addEventListener('click', () => {
+                    alert("Help & Support Center\n\nFor immediate assistance, please contact:\nHelpline: 1800-123-4567\nEmail: support@samajhealth.org");
+                });
+            }
+
+            // --- END HEADER BUTTONS FUNCTIONALITY ---
+
+            const loginForm = document.getElementById('loginForm');
+
+            if (loginForm) {
+                loginForm.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+
+                    // Get the selected role from the dropdown or buttons
+                    const roleSelect = document.querySelector('select[name="role"]');
+                    const role = roleSelect ? roleSelect.value : document.querySelector('input[name="role"]:checked')?.value;
+
+                    if (!role) {
+                        alert('Please select a role');
+                        return;
+                    }
+
+                    const formData = new FormData(e.target);
+                    const loginData = {
+                        username: formData.get('username'),
+                        password: formData.get('password'),
+                        role: role
+                    };
+
+                    const submitBtn = e.target.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
+
+                    // Show loading state
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<span>Signing in...</span>';
+
+                    try {
+                        // Use absolute URL to Railway backend
+                        const response = await fetch('/api/login', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(loginData)
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            // Store user data in localStorage
+                            localStorage.setItem('currentUser', JSON.stringify(result.user));
+
+                            // Show success message
+                            document.getElementById('success-modal').classList.remove('hidden');
+
+                            setTimeout(() => {
+                                const redirects = {
+                                    'asha': 'ashaworker.html',
+                                    'volunteer': 'volunteer-dashboard.html',
+                                    'admin': 'admin-dashboard.html',
+                                    'hospital': 'hospital-dashboard.html',
+                                    'patient': 'patient-dashboard.html'
+                                };
+
+                                const redirectPage = redirects[result.user.role] || 'dashboard.html';
+                                window.location.href = redirectPage;
+                            }, 2000);
+
+                        } else {
+                            alert('Login failed: ' + result.error);
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = originalText;
+                        }
+                    } catch (error) {
+                        console.error('Login error:', error);
+                        alert('Login failed. Please check your connection and try again.');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalText;
+                    }
+                });
+            }
+
+            // Role selection buttons
+            const roleButtons = document.querySelectorAll('.role-btn');
+            roleButtons.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    roleButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Modal functionality
+            window.showLoginModal = function (role) {
+                const modal = document.getElementById('login-modal');
+                const modalContent = document.getElementById('modal-content');
+                const modalTitle = document.getElementById('modal-title');
+
+                modalTitle.textContent = `Login as ${role.charAt(0).toUpperCase() + role.slice(1)}`;
+
+                modalContent.innerHTML = `
+                <form id="loginForm">
+                    <input type="hidden" name="role" value="${role}">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Username</label>
+                            <input type="text" name="username" required 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+                            <input type="password" name="password" required 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <button type="submit" 
+                                class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                            Sign In
+                        </button>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                            Don't have an account? 
+                            <a href="#" class="text-blue-600 hover:text-blue-700 font-medium" onclick="showRegisterModal('${role}')">Register here</a>
+                        </p>
+                    </div>
+                </form>
+            `;
+
+                modal.classList.remove('hidden');
+
+                // Re-attach event listener to the new form
+                const newLoginForm = document.getElementById('loginForm');
+                if (newLoginForm) {
+                    newLoginForm.addEventListener('submit', function (e) {
+                        e.preventDefault();
+                        const formData = new FormData(this);
+                        const loginData = {
+                            username: formData.get('username'),
+                            password: formData.get('password'),
+                            role: formData.get('role')
+                        };
+
+                        // Use the same login logic as above
+                        handleLogin(loginData);
+                    });
+                }
+            };
+
+            // Close modal functionality
+            document.getElementById('close-modal').addEventListener('click', function () {
+                document.getElementById('login-modal').classList.add('hidden');
+            });
+
+            // Close modal when clicking backdrop
+            document.getElementById('login-modal').addEventListener('click', function (e) {
+                if (e.target.id === 'login-modal') {
+                    this.classList.add('hidden');
+                }
+            });
+
+            // Handle login function
+            async function handleLogin(loginData) {
+                const submitBtn = document.querySelector('#loginForm button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span>Signing in...</span>';
+
+                try {
+                    const response = await fetch('/api/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(loginData)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        localStorage.setItem('currentUser', JSON.stringify(result.user));
+                        document.getElementById('success-modal').classList.remove('hidden');
+
+                        setTimeout(() => {
+                            const redirects = {
+                                'asha': 'ashaworker.html',
+                                'volunteer': 'volunteer-dashboard.html',
+                                'admin': 'admin-dashboard.html',
+                                'hospital': 'hospital-dashboard.html',
+                                'patient': 'patient-dashboard.html'
+                            };
+
+                            const redirectPage = redirects[result.user.role] || 'dashboard.html';
+                            window.location.href = redirectPage;
+                        }, 2000);
+
+                    } else {
+                        alert('Login failed: ' + result.error);
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalText;
+                    }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    alert('Login failed. Please check your connection and try again.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }
+            }
+        });
+
+        // Registration Modal Handler
+        window.showRegisterModal = function (role) {
+            const modal = document.getElementById('login-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+
+            // Map roles to their specific registration pages
+            const registrationPages = {
+                'asha': 'uy.html',
+                'volunteer': 'cv.html',
+                'admin': 'uy1ha.html',
+                'patient': 'patient-registration.html' // Assuming this exists or will exist
+            };
+
+            const page = registrationPages[role];
+
+            if (page) {
+                // Check if page exists (optional verification could be added here)
+                window.location.href = page;
+            } else {
+                // Fallback for undefined roles
+                console.warn(`No registration page defined for role: ${role}`);
+                alert(`Registration for ${role} is coming soon! Please contact your administrator.`);
+            }
+        };
+    </script>
+</body>
+
+</html>

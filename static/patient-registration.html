@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Registration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+
+<body class="font-sans min-h-screen bg-gradient-to-br from-green-50 to-teal-100">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
+                        <i data-lucide="user" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-gray-900">Patient Registration</h1>
+                        <p class="text-sm text-gray-600">Secure Health Portal</p>
+                    </div>
+                </div>
+                <!-- This link should point to your homepage -->
+                <a href="index.html"
+                    class="px-4 py-2 bg-green-100 hover:bg-green-200 rounded-lg transition-colors text-green-700 flex items-center gap-2">
+                    <i data-lucide="home" class="w-4 h-4"></i>
+                    <span>Back to Home</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-12">
+        <div class="max-w-2xl mx-auto">
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <div class="text-center mb-8">
+                    <div
+                        class="w-20 h-20 bg-gradient-to-r from-green-600 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="heart-pulse" class="w-10 h-10 text-white"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Patient Registration</h2>
+                    <p class="text-gray-600">Register to access your health records and services.</p>
+                </div>
+
+                <!-- Registration Form -->
+                <form id="patientRegistrationForm" class="space-y-6">
+                    <!-- Personal Information -->
+                    <div class="border border-gray-200 p-6 rounded-lg">
+                        <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                            <i data-lucide="user" class="w-5 h-5 text-green-600"></i>
+                            Personal Information
+                        </h2>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full
+                                    Name:</label>
+                                <input type="text" id="name" name="name" required
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <div>
+                                <label for="date-of-birth" class="block text-sm font-medium text-gray-700 mb-1">Date of
+                                    Birth:</label>
+                                <input type="date" id="date-of-birth" name="dateOfBirth" required
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <div>
+                                <label for="gender" class="block text-sm font-medium text-gray-700 mb-1">Gender:</label>
+                                <select id="gender" name="gender" required
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                    <option value="" disabled selected>Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div class="border border-gray-200 p-6 rounded-lg">
+                        <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                            <i data-lucide="phone" class="w-5 h-5 text-green-600"></i>
+                            Contact Information
+                        </h2>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="mobile" class="block text-sm font-medium text-gray-700 mb-1">Mobile
+                                    Number:</label>
+                                <input type="tel" id="mobile" name="mobile" required
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email:</label>
+                                <input type="email" id="email" name="email"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <div>
+                                <label for="emergency-name"
+                                    class="block text-sm font-medium text-gray-700 mb-1">Emergency Contact Name:</label>
+                                <input type="text" id="emergency-name" name="emergencyName"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <div>
+                                <label for="emergency-number"
+                                    class="block text-sm font-medium text-gray-700 mb-1">Emergency Contact
+                                    Number:</label>
+                                <input type="tel" id="emergency-number" name="emergencyNumber"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Address Information -->
+                    <div class="border border-gray-200 p-6 rounded-lg">
+                        <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-green-600"></i>
+                            Address
+                        </h2>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Address
+                                    Line:</label>
+                                <input type="text" id="address" name="address" required
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <div>
+                                <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City:</label>
+                                <input type="text" id="city" name="city" required
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <div>
+                                <label for="state" class="block text-sm font-medium text-gray-700 mb-1">State:</label>
+                                <input type="text" id="state" name="state" required
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <div>
+                                <label for="pincode"
+                                    class="block text-sm font-medium text-gray-700 mb-1">Pincode:</label>
+                                <input type="text" id="pincode" name="pincode" required
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Health Details -->
+                    <div class="border border-gray-200 p-6 rounded-lg">
+                        <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                            <i data-lucide="activity" class="w-5 h-5 text-green-600"></i>
+                            Health Details
+                        </h2>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="blood-group" class="block text-sm font-medium text-gray-700 mb-1">Blood
+                                    Group:</label>
+                                <select id="blood-group" name="bloodGroup"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                    <option value="" disabled selected>Select Blood Group</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="medical-history"
+                                    class="block text-sm font-medium text-gray-700 mb-1">Medical History
+                                    (Optional):</label>
+                                <textarea id="medical-history" name="medicalHistory" rows="3"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                    placeholder="e.g., Diabetes, Hypertension, Allergies"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Setup -->
+                    <div class="border border-gray-200 p-6 rounded-lg">
+                        <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                            <i data-lucide="shield" class="w-5 h-5 text-green-600"></i>
+                            Account Setup
+                        </h2>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="username"
+                                    class="block text-sm font-medium text-gray-700 mb-1">Username:</label>
+                                <input type="text" id="username" name="username" required
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <div>
+                                <label for="password"
+                                    class="block text-sm font-medium text-gray-700 mb-1">Password:</label>
+                                <input type="password" id="password" name="password" required
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full px-4 py-3 bg-gradient-to-r from-green-600 to-teal-600 text-white rounded-lg font-semibold hover:from-green-700 hover:to-teal-700 transition-all flex items-center justify-center gap-2">
+                        <i data-lucide="user-plus" class="w-5 h-5"></i>
+                        Register
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Success Message Modal -->
+    <div id="successModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white text-center">
+            <div class="mt-3 text-center">
+                <i data-lucide="check-circle" class="w-16 h-16 text-green-500 mx-auto mb-4"></i>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Registration Successful!</h3>
+                <div class="mt-2 px-7 py-3">
+                    <p class="text-sm text-gray-500">Your patient account has been created. You can now login.</p>
+                </div>
+                <div class="items-center px-4 py-3">
+                    <button id="closeModal"
+                        class="px-4 py-2 bg-green-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                lucide.createIcons();
+            }
+
+            // Get the form and modal elements
+            const form = document.getElementById('patientRegistrationForm');
+            const successModal = document.getElementById('successModal');
+            const closeModalBtn = document.getElementById('closeModal');
+
+            // Form submission handling
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const submitBtn = e.target.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+
+                // Show loading state
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span>Registering...</span>';
+
+                try {
+                    // Get form data
+                    const formData = new FormData(e.target);
+                    const formObject = Object.fromEntries(formData.entries());
+
+                    // Add role to the data
+                    const registrationData = {
+                        ...formObject,
+                        role: 'patient'
+                    };
+
+                    console.log('Sending registration data:', registrationData);
+
+                    // Send to backend
+                    const response = await fetch('/api/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(registrationData)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        // Show the success modal
+                        successModal.classList.remove('hidden');
+
+                        // Reset form after submission
+                        e.target.reset();
+                    } else {
+                        alert('Registration failed: ' + result.error);
+                    }
+                } catch (error) {
+                    console.error('Registration error:', error);
+                    alert('Registration failed. Please check your connection and try again.');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }
+            });
+
+            // Close the modal when the "OK" button is clicked
+            closeModalBtn.addEventListener('click', () => {
+                successModal.classList.add('hidden');
+                // Redirect to login page after closing modal
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+
+</html>
