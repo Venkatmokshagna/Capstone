@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -139,7 +139,7 @@
         <div class="container mx-auto flex items-center justify-between">
             <div class="flex items-center gap-4 animate-slide-in-left">
                 <div id="logo-container"
-                    class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center floating-animation">
+                    class="w-12 h-12 bg-gray-950/20 rounded-full flex items-center justify-center floating-animation">
                     <i data-lucide="heart-pulse" id="logo-icon" class="w-6 h-6 text-white"></i>
                 </div>
                 <div>
@@ -563,65 +563,65 @@
         function applyTheme(isDark) {
             if (isDark) {
                 // --- DARK MODE ---
-                body.classList.remove(...lightBackgroundClasses, 'text-gray-900'); // Clean up light background classes
+                body.classList.remove(...lightBackgroundClasses, 'text-gray-100'); // Clean up light background classes
                 body.classList.add('gradient-bg', 'text-white');
 
                 // Header: transparent/glass background
-                header.classList.remove(...lightHeaderFooterClasses, 'text-gray-900', 'shadow-md'); // Clean up light header classes
+                header.classList.remove(...lightHeaderFooterClasses, 'text-gray-100', 'shadow-md'); // Clean up light header classes
                 header.classList.add('bg-transparent', 'text-white');
 
                 // Footer: dark text color
-                footer.classList.remove(...lightHeaderFooterClasses, 'text-gray-800', 'shadow-inner'); // Clean up light footer classes
+                footer.classList.remove(...lightHeaderFooterClasses, 'text-gray-200', 'shadow-inner'); // Clean up light footer classes
                 footer.classList.add('text-white/70');
 
                 // LEFT HEADER BLOCK FIX (Dark Mode)
                 logoContainer.classList.remove('bg-purple-200/50');
-                logoContainer.classList.add('bg-white/20');
+                logoContainer.classList.add('bg-gray-950/20');
 
                 // LOGO ICON FIX: Remove Gradient, Apply White
                 logoIcon.classList.remove(...logoGradientClasses);
                 logoIcon.classList.add('text-white');
 
-                headerTitle.classList.remove('text-gray-900');
+                headerTitle.classList.remove('text-gray-100');
                 headerTitle.classList.add('text-white');
 
-                headerTagline.classList.remove('text-gray-700');
+                headerTagline.classList.remove('text-gray-300');
                 headerTagline.classList.add('text-white/80');
 
                 // Right-Side Interactive Elements
                 headerButtons.forEach(btn => {
-                    btn.classList.remove('bg-gray-200', 'hover:bg-gray-300');
-                    btn.classList.add('bg-white/20', 'hover:bg-white/30');
+                    btn.classList.remove('bg-gray-800', 'hover:bg-gray-300');
+                    btn.classList.add('bg-gray-950/20', 'hover:bg-gray-950/30');
                 });
                 headerIcons.forEach(icon => {
-                    icon.classList.remove('text-gray-800');
+                    icon.classList.remove('text-gray-200');
                     icon.classList.add('text-white');
                 });
                 headerTexts.forEach(text => {
-                    text.classList.remove('text-gray-800');
+                    text.classList.remove('text-gray-200');
                     text.classList.add('text-white');
                 });
 
                 // Language Dropdown
-                langDropdown.classList.remove('bg-white', 'shadow-lg');
+                langDropdown.classList.remove('bg-gray-950', 'shadow-lg');
                 langDropdown.classList.add('bg-gray-800/80', 'text-white');
 
                 themeToggle.innerHTML = '<i data-lucide="sun" class="w-5 h-5 text-white"></i>';
             } else {
                 // --- LIGHT MODE (New Gradient Background) ---
                 body.classList.remove('gradient-bg', 'text-white');
-                body.classList.add(...lightBackgroundClasses, 'text-gray-900'); // Apply light gradient background
+                body.classList.add(...lightBackgroundClasses, 'text-gray-100'); // Apply light gradient background
 
                 // Header: Apply light gradient background
                 header.classList.remove('bg-transparent', 'text-white');
-                header.classList.add(...lightHeaderFooterClasses, 'text-gray-900', 'shadow-md');
+                header.classList.add(...lightHeaderFooterClasses, 'text-gray-100', 'shadow-md');
 
                 // Footer: Apply light gradient background
                 footer.classList.remove('text-white/70');
-                footer.classList.add(...lightHeaderFooterClasses, 'text-gray-800', 'shadow-inner');
+                footer.classList.add(...lightHeaderFooterClasses, 'text-gray-200', 'shadow-inner');
 
                 // LEFT HEADER BLOCK FIX (Light Mode)
-                logoContainer.classList.remove('bg-white/20');
+                logoContainer.classList.remove('bg-gray-950/20');
                 logoContainer.classList.add('bg-purple-200/50');
 
                 // LOGO ICON FIX: Apply Gradient (MATCHING KEY MESSAGE)
@@ -629,30 +629,30 @@
                 logoIcon.classList.add(...logoGradientClasses);
 
                 headerTitle.classList.remove('text-white');
-                headerTitle.classList.add('text-gray-900');
+                headerTitle.classList.add('text-gray-100');
 
                 headerTagline.classList.remove('text-white/80');
-                headerTagline.classList.add('text-gray-700');
+                headerTagline.classList.add('text-gray-300');
 
                 // Right-Side Interactive Elements
                 headerButtons.forEach(btn => {
-                    btn.classList.remove('bg-white/20', 'hover:bg-white/30');
-                    btn.classList.add('bg-gray-200', 'hover:bg-gray-300');
+                    btn.classList.remove('bg-gray-950/20', 'hover:bg-gray-950/30');
+                    btn.classList.add('bg-gray-800', 'hover:bg-gray-300');
                 });
                 headerIcons.forEach(icon => {
                     icon.classList.remove('text-white');
-                    icon.classList.add('text-gray-800');
+                    icon.classList.add('text-gray-200');
                 });
                 headerTexts.forEach(text => {
                     text.classList.remove('text-white');
-                    text.classList.add('text-gray-800');
+                    text.classList.add('text-gray-200');
                 });
 
                 // Language Dropdown
                 langDropdown.classList.remove('bg-gray-800/80', 'text-white');
-                langDropdown.classList.add('bg-white', 'shadow-lg');
+                langDropdown.classList.add('bg-gray-950', 'shadow-lg');
 
-                themeToggle.innerHTML = '<i data-lucide="moon" class="w-5 h-5 text-gray-800"></i>';
+                themeToggle.innerHTML = '<i data-lucide="moon" class="w-5 h-5 text-gray-200"></i>';
             }
             // Re-render icons after changing the toggle button's content
             lucide.createIcons();

@@ -1,0 +1,359 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard - Samaj Health Suraksha</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <style id="dark-theme-override">
+        /* ===== DARK MODE FORCED OVERRIDE ===== */
+        html, body {
+            background: #0a0a0a !important;
+            color: #f5f5f5 !important;
+            min-height: 100vh;
+        }
+        /* Nav */
+        nav, .nav-glass {
+            background: rgba(8,0,0,0.92) !important;
+            border-bottom: 1px solid rgba(220,38,38,0.20) !important;
+            box-shadow: 0 2px 20px rgba(220,38,38,0.12) !important;
+        }
+        /* Cards & Sections */
+        .stat-card-inner, .section-card, .light-card,
+        [class*="rounded-"][class*="shadow"], .card {
+            background: #111111 !important;
+            border-color: rgba(220,38,38,0.18) !important;
+            color: #f5f5f5 !important;
+        }
+        .section-header {
+            background: linear-gradient(90deg, rgba(220,38,38,0.07), transparent) !important;
+            border-bottom: 1px solid rgba(220,38,38,0.12) !important;
+        }
+        /* Stat numbers */
+        .stat-num { color: #ef4444 !important; }
+        /* Tables */
+        table th {
+            color: #f87171 !important;
+            background: rgba(220,38,38,0.10) !important;
+            font-size: 0.7rem !important;
+            letter-spacing: 0.08em !important;
+        }
+        table td {
+            color: #e5e7eb !important;
+            border-bottom: 1px solid rgba(220,38,38,0.08) !important;
+        }
+        table tbody tr:hover td {
+            color: #fff !important;
+            background: rgba(220,38,38,0.07) !important;
+        }
+        /* Text visibility */
+        h1,h2,h3,h4,h5,h6 { color: #f5f5f5 !important; }
+        .text-gray-900, .text-gray-800, .text-gray-700, .text-gray-600 { color: #d1d5db !important; }
+        .text-gray-500 { color: #9ca3af !important; }
+        .text-gray-400 { color: #a3a3a3 !important; }
+        /* BG overrides */
+        .bg-white, .bg-gray-50, .bg-gray-100 { background-color: #111111 !important; }
+        .bg-gray-200 { background-color: #1a1a1a !important; }
+        .bg-gray-800, .bg-gray-900, .bg-gray-950 { background-color: #0a0a0a !important; }
+        /* Borders */
+        .border-gray-100,.border-gray-200,.border-gray-300 { border-color: rgba(220,38,38,0.12) !important; }
+        /* Inputs */
+        input, select, textarea {
+            background: #1a0505 !important;
+            color: #f5f5f5 !important;
+            border-color: rgba(220,38,38,0.25) !important;
+        }
+        input::placeholder { color: #6b7280 !important; }
+        /* Badges */
+        .risk-badge-high {
+            background: linear-gradient(135deg,#450a0a,#7f1d1d) !important;
+            color: #fca5a5 !important;
+            border: 1px solid rgba(239,68,68,0.4) !important;
+        }
+        .risk-badge-medium {
+            background: linear-gradient(135deg,#431407,#7c2d12) !important;
+            color: #fdba74 !important;
+            border: 1px solid rgba(249,115,22,0.4) !important;
+        }
+        .risk-badge-low {
+            background: linear-gradient(135deg,#052e16,#14532d) !important;
+            color: #86efac !important;
+            border: 1px solid rgba(34,197,94,0.3) !important;
+        }
+        /* Alert cards */
+        .alert-card-high {
+            border-left: 4px solid #ef4444 !important;
+            background: #130505 !important;
+            color: #fca5a5 !important;
+        }
+        .alert-card-medium {
+            border-left: 4px solid #f59e0b !important;
+            background: #130c00 !important;
+            color: #fde68a !important;
+        }
+        /* Buttons */
+        button, .btn { color: inherit; }
+        /* Main body gradient */
+        body {
+            background: linear-gradient(135deg,#0a0a0a 0%,#110000 50%,#0f0505 100%) !important;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-950 dark:bg-gray-900 min-h-screen">
+    <nav
+        class="bg-gray-950 dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 p-4 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
+                    <i data-lucide="user" class="w-6 h-6 text-white"></i>
+                </div>
+                <h1 class="text-xl font-bold text-gray-100 dark:text-white">Patient Portal</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <div
+                    class="flex items-center gap-2 bg-gray-900 dark:bg-gray-700 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-600">
+                    <span id="village-name" class="text-sm font-bold text-gray-300 dark:text-gray-300">...</span>
+                    <button onclick="openChangeVillageModal()"
+                        class="p-1 hover:bg-gray-800 dark:hover:bg-gray-600 rounded-md text-green-600 transition-colors"
+                        title="Change Village">
+                        <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+                <button onclick="logout()"
+                    class="p-2 hover:bg-gray-900 dark:hover:bg-gray-700 rounded-lg text-red-500 transition-colors">
+                    <i data-lucide="log-out" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-8">
+            <div
+                class="bg-gray-950 dark:bg-gray-800 p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                <h2 class="text-2xl font-bold mb-6 dark:text-white flex items-center gap-2">
+                    <i data-lucide="thermometer" class="text-green-500"></i>
+                    Report Symptoms
+                </h2>
+                <form id="symptom-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">What symptoms are
+                            you experiencing?</label>
+                        <textarea name="symptoms" required rows="3" placeholder="e.g. Fever for 2 days, stomach pain..."
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
+                    </div>
+                    <button type="submit"
+                        class="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition-all">
+                        Submit Report
+                    </button>
+                </form>
+            </div>
+
+            <div
+                class="bg-gray-950 dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                <h3 class="text-lg font-bold mb-4 dark:text-white">Village Health Status</h3>
+                <div id="village-risk" class="p-4 rounded-xl text-center font-bold text-lg mb-4">...</div>
+                <div id="village-alerts" class="space-y-3">
+                    <!-- Loaded by JS -->
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div
+                class="bg-gray-950 dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                <h3 class="font-bold mb-4 flex items-center gap-2 dark:text-white">
+                    <i data-lucide="info" class="text-blue-500"></i>
+                    Health Tips
+                </h3>
+                <ul class="space-y-3 text-sm text-gray-600 dark:text-gray-400">
+                    <li class="flex gap-2"><span>•</span> Always boil water before drinking.</li>
+                    <li class="flex gap-2"><span>•</span> Wash hands thoroughly with soap.</li>
+                    <li class="flex gap-2"><span>•</span> Avoid eating street food during monsoon.</li>
+                    <li class="flex gap-2"><span>•</span> Report symptoms early to your ASHA worker.</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Change Village Modal -->
+    <div id="changeVillageModal"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+        <div
+            class="bg-gray-950 dark:bg-gray-800 rounded-2xl p-8 max-w-md w-full shadow-2xl border border-gray-100 dark:border-gray-700 transform transition-all">
+            <h3 class="text-2xl font-bold mb-2 dark:text-white">Change Village</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Select your current residential village to see
+                local health status.</p>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">Select
+                        Village</label>
+                    <select id="modal_village_id"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+                <div class="flex gap-4 pt-2">
+                    <button onclick="closeChangeVillageModal()"
+                        class="flex-1 px-4 py-3 bg-gray-900 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-xl font-bold hover:bg-gray-800 transition-colors">Cancel</button>
+                    <button onclick="saveVillageChange()"
+                        class="flex-1 px-4 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 shadow-lg shadow-green-500/20 transition-all">Save
+                        Change</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentVillageId = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            initDashboard();
+
+            // Auto-refresh every 15 seconds
+            setInterval(() => {
+                if (currentVillageId) {
+                    loadVillageRisk(currentVillageId);
+                    loadAlerts(currentVillageId);
+                }
+            }, 15000);
+
+            document.getElementById('symptom-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const data = {
+                    symptoms: formData.get('symptoms'),
+                    disease_type: 'Self-Reported',
+                    village_id: currentVillageId // Ensure village_id is sent
+                };
+
+                try {
+                    const response = await fetch('/api/report/health', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (response.ok) {
+                        alert('Symptoms reported successfully. Stay hydrated and consult your ASHA worker if symptoms worsen.');
+                        e.target.reset();
+                        // Refresh status immediately
+                        loadVillageRisk(currentVillageId);
+                        loadAlerts(currentVillageId);
+                    } else {
+                        alert('Error submitting report.');
+                    }
+                } catch (error) { console.error('Submit error:', error); }
+            });
+        });
+
+        async function initDashboard() {
+            try {
+                const response = await fetch('/api/me');
+                const user = await response.json();
+
+                if (user.village_id) {
+                    currentVillageId = user.village_id;
+                    document.getElementById('village-name').textContent = user.village_name;
+                    loadVillageRisk(currentVillageId);
+                    loadAlerts(currentVillageId);
+                } else {
+                    document.getElementById('village-name').textContent = "Village Not Set";
+                }
+            } catch (error) { console.error('Init error:', error); }
+        }
+
+        async function loadVillageRisk(v_id) {
+            try {
+                const response = await fetch(`/api/village/risk?village_id=${v_id}`);
+                const status = await response.json();
+
+                const riskBox = document.getElementById('village-risk');
+                riskBox.textContent = `Village Health Risk: ${status.risk_level}`;
+
+                const riskClasses = {
+                    'HIGH': 'bg-red-100 text-red-700 border-2 border-red-200',
+                    'MEDIUM': 'bg-yellow-100 text-yellow-700 border-2 border-yellow-200',
+                    'LOW': 'bg-green-100 text-green-700 border-2 border-green-200'
+                };
+
+                riskBox.className = `p-4 rounded-xl text-center font-bold text-lg mb-4 shadow-sm ${riskClasses[status.risk_level] || riskClasses['LOW']}`;
+            } catch (error) { console.error('Risk status error:', error); }
+        }
+
+        async function loadAlerts(v_id) {
+            try {
+                const response = await fetch(`/api/alerts?village_id=${v_id}`);
+                const alerts = await response.json();
+                const container = document.getElementById('village-alerts');
+
+                if (alerts.length === 0) {
+                    container.innerHTML = `
+                        <div class="p-4 bg-gray-950 dark:bg-gray-700/50 rounded-xl text-center">
+                            <p class="text-sm text-gray-500">No active health alerts for your village.</p>
+                        </div>`;
+                    return;
+                }
+
+                container.innerHTML = alerts.map(a => `
+                    <div class="p-4 bg-gray-950 dark:bg-gray-800 border-l-4 ${a.risk_level === 'HIGH' ? 'border-red-500' : 'border-yellow-500'} shadow-sm rounded-r-xl">
+                        <span class="font-bold text-gray-100 dark:text-white block">${a.risk_level} Risk</span>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">${a.message}</p>
+                        <span class="text-[10px] text-gray-400 mt-2 block uppercase">${new Date(a.created_at).toLocaleString()}</span>
+                    </div>
+                `).join('');
+            } catch (error) { console.error('Alerts error:', error); }
+        }
+
+        function logout() {
+            window.location.href = 'index.html';
+        }
+
+        // Village Switching Logic
+        async function openChangeVillageModal() {
+            const modal = document.getElementById('changeVillageModal');
+            const select = document.getElementById('modal_village_id');
+            modal.classList.remove('hidden');
+
+            try {
+                const response = await fetch('/api/villages');
+                const villages = await response.json();
+                select.innerHTML = villages.map(v => `<option value="${v.id}" ${v.id == currentVillageId ? 'selected' : ''}>${v.name} (${v.district})</option>`).join('');
+            } catch (error) { console.error('Error loading villages:', error); }
+        }
+
+        function closeChangeVillageModal() {
+            document.getElementById('changeVillageModal').classList.add('hidden');
+        }
+
+        async function saveVillageChange() {
+            const villageId = document.getElementById('modal_village_id').value;
+            if (!villageId) return;
+
+            try {
+                const response = await fetch('/api/me/update-village', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ village_id: villageId })
+                });
+
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    const err = await response.json();
+                    alert('Error: ' + err.error);
+                }
+            } catch (error) { console.error('Update error:', error); }
+        }
+    </script>
+    <!-- Chatbot Widget -->
+    <script src="chatbot.js"></script>
+</body>
+
+
+</html>

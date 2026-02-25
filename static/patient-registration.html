@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -11,7 +11,7 @@
 
 <body class="font-sans min-h-screen bg-gradient-to-br from-green-50 to-teal-100">
     <!-- Header -->
-    <header class="bg-white shadow-sm border-b">
+    <header class="bg-gray-950 shadow-sm border-b">
         <div class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-4">
@@ -19,7 +19,7 @@
                         <i data-lucide="user" class="w-5 h-5 text-white"></i>
                     </div>
                     <div>
-                        <h1 class="text-lg font-bold text-gray-900">Patient Registration</h1>
+                        <h1 class="text-lg font-bold text-gray-100">Patient Registration</h1>
                         <p class="text-sm text-gray-600">Secure Health Portal</p>
                     </div>
                 </div>
@@ -36,13 +36,13 @@
     <!-- Main Content -->
     <main class="container mx-auto px-6 py-12">
         <div class="max-w-2xl mx-auto">
-            <div class="bg-white rounded-2xl shadow-xl p-8">
+            <div class="bg-gray-950 rounded-2xl shadow-xl p-8">
                 <div class="text-center mb-8">
                     <div
                         class="w-20 h-20 bg-gradient-to-r from-green-600 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i data-lucide="heart-pulse" class="w-10 h-10 text-white"></i>
                     </div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Patient Registration</h2>
+                    <h2 class="text-2xl font-bold text-gray-100 mb-2">Patient Registration</h2>
                     <p class="text-gray-600">Register to access your health records and services.</p>
                 </div>
 
@@ -56,19 +56,19 @@
                         </h2>
                         <div class="space-y-4">
                             <div>
-                                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full
+                                <label for="name" class="block text-sm font-medium text-gray-300 mb-1">Full
                                     Name:</label>
                                 <input type="text" id="name" name="name" required
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
                             </div>
                             <div>
-                                <label for="date-of-birth" class="block text-sm font-medium text-gray-700 mb-1">Date of
+                                <label for="date-of-birth" class="block text-sm font-medium text-gray-300 mb-1">Date of
                                     Birth:</label>
                                 <input type="date" id="date-of-birth" name="dateOfBirth" required
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
                             </div>
                             <div>
-                                <label for="gender" class="block text-sm font-medium text-gray-700 mb-1">Gender:</label>
+                                <label for="gender" class="block text-sm font-medium text-gray-300 mb-1">Gender:</label>
                                 <select id="gender" name="gender" required
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
                                     <option value="" disabled selected>Select Gender</option>
@@ -88,25 +88,25 @@
                         </h2>
                         <div class="space-y-4">
                             <div>
-                                <label for="mobile" class="block text-sm font-medium text-gray-700 mb-1">Mobile
+                                <label for="mobile" class="block text-sm font-medium text-gray-300 mb-1">Mobile
                                     Number:</label>
                                 <input type="tel" id="mobile" name="mobile" required
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
                             </div>
                             <div>
-                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email:</label>
+                                <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email:</label>
                                 <input type="email" id="email" name="email"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
                             </div>
                             <div>
                                 <label for="emergency-name"
-                                    class="block text-sm font-medium text-gray-700 mb-1">Emergency Contact Name:</label>
+                                    class="block text-sm font-medium text-gray-300 mb-1">Emergency Contact Name:</label>
                                 <input type="text" id="emergency-name" name="emergencyName"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
                             </div>
                             <div>
                                 <label for="emergency-number"
-                                    class="block text-sm font-medium text-gray-700 mb-1">Emergency Contact
+                                    class="block text-sm font-medium text-gray-300 mb-1">Emergency Contact
                                     Number:</label>
                                 <input type="tel" id="emergency-number" name="emergencyNumber"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
@@ -122,24 +122,32 @@
                         </h2>
                         <div class="space-y-4">
                             <div>
-                                <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Address
+                                <label for="village_id"
+                                    class="block text-sm font-medium text-gray-300 mb-1">Village:</label>
+                                <select id="village_id" name="village_id" required
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                    <option value="">Select Village</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="address" class="block text-sm font-medium text-gray-300 mb-1">Address
                                     Line:</label>
                                 <input type="text" id="address" name="address" required
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
                             </div>
                             <div>
-                                <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City:</label>
+                                <label for="city" class="block text-sm font-medium text-gray-300 mb-1">City:</label>
                                 <input type="text" id="city" name="city" required
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
                             </div>
                             <div>
-                                <label for="state" class="block text-sm font-medium text-gray-700 mb-1">State:</label>
+                                <label for="state" class="block text-sm font-medium text-gray-300 mb-1">State:</label>
                                 <input type="text" id="state" name="state" required
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
                             </div>
                             <div>
                                 <label for="pincode"
-                                    class="block text-sm font-medium text-gray-700 mb-1">Pincode:</label>
+                                    class="block text-sm font-medium text-gray-300 mb-1">Pincode:</label>
                                 <input type="text" id="pincode" name="pincode" required
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
                             </div>
@@ -154,7 +162,7 @@
                         </h2>
                         <div class="space-y-4">
                             <div>
-                                <label for="blood-group" class="block text-sm font-medium text-gray-700 mb-1">Blood
+                                <label for="blood-group" class="block text-sm font-medium text-gray-300 mb-1">Blood
                                     Group:</label>
                                 <select id="blood-group" name="bloodGroup"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
@@ -171,7 +179,7 @@
                             </div>
                             <div>
                                 <label for="medical-history"
-                                    class="block text-sm font-medium text-gray-700 mb-1">Medical History
+                                    class="block text-sm font-medium text-gray-300 mb-1">Medical History
                                     (Optional):</label>
                                 <textarea id="medical-history" name="medicalHistory" rows="3"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
@@ -189,13 +197,13 @@
                         <div class="space-y-4">
                             <div>
                                 <label for="username"
-                                    class="block text-sm font-medium text-gray-700 mb-1">Username:</label>
+                                    class="block text-sm font-medium text-gray-300 mb-1">Username:</label>
                                 <input type="text" id="username" name="username" required
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
                             </div>
                             <div>
                                 <label for="password"
-                                    class="block text-sm font-medium text-gray-700 mb-1">Password:</label>
+                                    class="block text-sm font-medium text-gray-300 mb-1">Password:</label>
                                 <input type="password" id="password" name="password" required
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
                             </div>
@@ -214,10 +222,10 @@
 
     <!-- Success Message Modal -->
     <div id="successModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white text-center">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-gray-950 text-center">
             <div class="mt-3 text-center">
                 <i data-lucide="check-circle" class="w-16 h-16 text-green-500 mx-auto mb-4"></i>
-                <h3 class="text-lg leading-6 font-medium text-gray-900">Registration Successful!</h3>
+                <h3 class="text-lg leading-6 font-medium text-gray-100">Registration Successful!</h3>
                 <div class="mt-2 px-7 py-3">
                     <p class="text-sm text-gray-500">Your patient account has been created. You can now login.</p>
                 </div>
@@ -295,6 +303,26 @@
                     submitBtn.innerHTML = originalText;
                 }
             });
+
+            // Fetch villages
+            async function loadVillages() {
+                try {
+                    const response = await fetch('/api/villages');
+                    const villages = await response.json();
+                    const villageSelect = document.getElementById('village_id');
+                    if (villageSelect) {
+                        villages.forEach(v => {
+                            const option = document.createElement('option');
+                            option.value = v.id;
+                            option.textContent = `${v.name} (${v.district})`;
+                            villageSelect.appendChild(option);
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error loading villages:', error);
+                }
+            }
+            loadVillages();
 
             // Close the modal when the "OK" button is clicked
             closeModalBtn.addEventListener('click', () => {

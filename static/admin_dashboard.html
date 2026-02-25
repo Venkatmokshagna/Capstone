@@ -1,0 +1,629 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Samaj Health Suraksha</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+        <style id="dark-theme-override">
+        /* ===== DARK MODE FORCED OVERRIDE ===== */
+        html, body {
+            background: #0a0a0a !important;
+            color: #f5f5f5 !important;
+            min-height: 100vh;
+        }
+        /* Nav */
+        nav, .nav-glass {
+            background: rgba(8,0,0,0.92) !important;
+            border-bottom: 1px solid rgba(220,38,38,0.20) !important;
+            box-shadow: 0 2px 20px rgba(220,38,38,0.12) !important;
+        }
+        /* Cards & Sections */
+        .stat-card-inner, .section-card, .light-card,
+        [class*="rounded-"][class*="shadow"], .card {
+            background: #111111 !important;
+            border-color: rgba(220,38,38,0.18) !important;
+            color: #f5f5f5 !important;
+        }
+        .section-header {
+            background: linear-gradient(90deg, rgba(220,38,38,0.07), transparent) !important;
+            border-bottom: 1px solid rgba(220,38,38,0.12) !important;
+        }
+        /* Stat numbers */
+        .stat-num { color: #ef4444 !important; }
+        /* Tables */
+        table th {
+            color: #f87171 !important;
+            background: rgba(220,38,38,0.10) !important;
+            font-size: 0.7rem !important;
+            letter-spacing: 0.08em !important;
+        }
+        table td {
+            color: #e5e7eb !important;
+            border-bottom: 1px solid rgba(220,38,38,0.08) !important;
+        }
+        table tbody tr:hover td {
+            color: #fff !important;
+            background: rgba(220,38,38,0.07) !important;
+        }
+        /* Text visibility */
+        h1,h2,h3,h4,h5,h6 { color: #f5f5f5 !important; }
+        .text-gray-900, .text-gray-800, .text-gray-700, .text-gray-600 { color: #d1d5db !important; }
+        .text-gray-500 { color: #9ca3af !important; }
+        .text-gray-400 { color: #a3a3a3 !important; }
+        /* BG overrides */
+        .bg-white, .bg-gray-50, .bg-gray-100 { background-color: #111111 !important; }
+        .bg-gray-200 { background-color: #1a1a1a !important; }
+        .bg-gray-800, .bg-gray-900, .bg-gray-950 { background-color: #0a0a0a !important; }
+        /* Borders */
+        .border-gray-100,.border-gray-200,.border-gray-300 { border-color: rgba(220,38,38,0.12) !important; }
+        /* Inputs */
+        input, select, textarea {
+            background: #1a0505 !important;
+            color: #f5f5f5 !important;
+            border-color: rgba(220,38,38,0.25) !important;
+        }
+        input::placeholder { color: #6b7280 !important; }
+        /* Badges */
+        .risk-badge-high {
+            background: linear-gradient(135deg,#450a0a,#7f1d1d) !important;
+            color: #fca5a5 !important;
+            border: 1px solid rgba(239,68,68,0.4) !important;
+        }
+        .risk-badge-medium {
+            background: linear-gradient(135deg,#431407,#7c2d12) !important;
+            color: #fdba74 !important;
+            border: 1px solid rgba(249,115,22,0.4) !important;
+        }
+        .risk-badge-low {
+            background: linear-gradient(135deg,#052e16,#14532d) !important;
+            color: #86efac !important;
+            border: 1px solid rgba(34,197,94,0.3) !important;
+        }
+        /* Alert cards */
+        .alert-card-high {
+            border-left: 4px solid #ef4444 !important;
+            background: #130505 !important;
+            color: #fca5a5 !important;
+        }
+        .alert-card-medium {
+            border-left: 4px solid #f59e0b !important;
+            background: #130c00 !important;
+            color: #fde68a !important;
+        }
+        /* Buttons */
+        button, .btn { color: inherit; }
+        /* Main body gradient */
+        body {
+            background: linear-gradient(135deg,#0a0a0a 0%,#110000 50%,#0f0505 100%) !important;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="nav-glass sticky top-0 z-50 px-6 py-3">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3 animate-slide-in-left">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center shimmer-card"
+                    style="background:linear-gradient(135deg,#6366f1,#a855f7)">
+                    <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-indigo-900">Admin Dashboard</h1>
+                    <p class="text-xs text-red-400 font-medium">Samaj Health Suraksha</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 animate-slide-in-right">
+                <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-red-950 border border-indigo-100">
+                    <div
+                        class="w-7 h-7 rounded-full bg-gradient-to-br from-red-600 to-purple-500 flex items-center justify-center">
+                        <i data-lucide="user" class="w-4 h-4 text-white"></i>
+                    </div>
+                    <span id="admin-name" class="text-sm font-semibold text-indigo-800">Administrator</span>
+                </div>
+                <button onclick="logout()"
+                    class="flex items-center gap-1.5 px-3 py-2 rounded-xl text-red-500 hover:bg-red-50 border border-transparent hover:border-red-200 font-semibold text-sm transition-all duration-200">
+                    <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-6 py-8 space-y-8">
+
+        <!-- High Risk Alert Banner -->
+        <div id="high-risk-notification"
+            class="hidden notification-slide bg-gradient-to-r from-red-600 to-rose-600 text-white p-5 rounded-2xl shadow-2xl flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="p-2.5 bg-gray-950/20 rounded-xl heartbeat">
+                    <i data-lucide="alert-triangle" class="w-7 h-7 text-white"></i>
+                </div>
+                <div>
+                    <h2 class="text-lg font-black uppercase tracking-widest">🚨 Emergency Alert: Outbreak Detected</h2>
+                    <p class="text-sm font-medium opacity-90 mt-0.5" id="notification-message">Immediate action required
+                        in High Risk areas.</p>
+                </div>
+            </div>
+            <button onclick="this.parentElement.classList.add('hidden')"
+                class="p-2 hover:bg-gray-950/15 rounded-full transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <!-- Overview Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+            <div class="stat-card-inner reveal" style="--delay:0s">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm font-semibold text-red-400 uppercase tracking-wide">Total Villages</span>
+                    <div class="w-9 h-9 rounded-xl bg-red-950 flex items-center justify-center">
+                        <i data-lucide="map" class="w-5 h-5 text-red-500"></i>
+                    </div>
+                </div>
+                <div class="stat-num count-up" id="total-villages">—</div>
+                <p class="text-xs text-gray-400 mt-1">Monitored locations</p>
+            </div>
+            <div class="stat-card-inner reveal reveal-delay-1">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm font-semibold text-red-500 uppercase tracking-wide">Total Cases</span>
+                    <div class="w-9 h-9 rounded-xl bg-red-100 flex items-center justify-center">
+                        <i data-lucide="activity" class="w-5 h-5 text-red-600"></i>
+                    </div>
+                </div>
+                <div class="stat-num count-up" id="total-cases" style="color:#ef4444">—</div>
+                <p class="text-xs text-gray-400 mt-1">Last 7 days</p>
+            </div>
+            <div class="stat-card-inner reveal reveal-delay-2">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm font-semibold text-amber-500 uppercase tracking-wide">Active Alerts</span>
+                    <div class="w-9 h-9 rounded-xl bg-amber-100 flex items-center justify-center">
+                        <i data-lucide="bell" class="w-5 h-5 text-amber-600"></i>
+                    </div>
+                </div>
+                <div class="stat-num count-up" id="active-alerts" style="color:#f59e0b">—</div>
+                <p class="text-xs text-gray-400 mt-1">System-wide alerts</p>
+            </div>
+            <div class="stat-card-inner reveal reveal-delay-3">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm font-semibold text-purple-500 uppercase tracking-wide">High Risk Areas</span>
+                    <div class="w-9 h-9 rounded-xl bg-purple-100 flex items-center justify-center">
+                        <i data-lucide="alert-octagon" class="w-5 h-5 text-red-500"></i>
+                    </div>
+                </div>
+                <div class="stat-num count-up" id="high-risk-count" style="color:#a855f7">—</div>
+                <p class="text-xs text-gray-400 mt-1">Critical zones</p>
+            </div>
+        </div>
+
+        <!-- Live Alerts Feed -->
+        <div class="section-card reveal">
+            <div class="section-header">
+                <div class="flex items-center gap-3">
+                    <h3 class="text-lg font-bold text-indigo-900">Active System Alerts</h3>
+                    <span class="pulse-dot"></span>
+                    <span
+                        class="text-xs font-bold text-red-500 uppercase tracking-widest bg-red-50 px-2 py-0.5 rounded-full border border-red-100">Live</span>
+                </div>
+                <button onclick="loadAlerts()"
+                    class="flex items-center gap-1.5 text-red-500 hover:text-indigo-800 text-sm font-semibold px-3 py-1.5 rounded-lg hover:bg-red-950 transition-all">
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i> Refresh
+                </button>
+            </div>
+            <div id="alerts-container" class="p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Loaded by JS -->
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 reveal">
+            <div class="section-card p-6">
+                <h3 class="text-lg font-bold text-indigo-900 mb-4 flex items-center gap-2">
+                    <i data-lucide="bar-chart-2" class="w-5 h-5 text-red-400"></i>
+                    Disease Distribution
+                </h3>
+                <canvas id="diseaseChart" height="200"></canvas>
+            </div>
+            <div class="section-card p-6">
+                <h3 class="text-lg font-bold text-indigo-900 mb-4 flex items-center gap-2">
+                    <i data-lucide="pie-chart" class="w-5 h-5 text-purple-500"></i>
+                    Village Risk Levels
+                </h3>
+                <canvas id="riskChart" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Field Staff Directory -->
+        <div class="section-card reveal">
+            <div class="section-header">
+                <div>
+                    <h3 class="text-lg font-bold text-indigo-900">👥 Field Staff Directory</h3>
+                    <p class="text-sm text-gray-400 mt-0.5">Contact details for ASHA workers and volunteers across all
+                        villages.</p>
+                </div>
+                <button onclick="loadStaffData()"
+                    class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-red-950 hover:bg-red-950 text-red-500 font-semibold text-sm transition-all">
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i> Refresh
+                </button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead style="background:linear-gradient(90deg,rgba(99,102,241,0.06),rgba(168,85,247,0.04))">
+                        <tr>
+                            <th class="p-4 text-xs font-bold text-red-500 uppercase tracking-wider">Name</th>
+                            <th class="p-4 text-xs font-bold text-red-500 uppercase tracking-wider">Role</th>
+                            <th class="p-4 text-xs font-bold text-red-500 uppercase tracking-wider">Contact No.</th>
+                            <th class="p-4 text-xs font-bold text-red-500 uppercase tracking-wider">Target Village
+                            </th>
+                            <th class="p-4 text-xs font-bold text-red-500 uppercase tracking-wider">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="staff-table-body" class="divide-y divide-indigo-50">
+                        <tr>
+                            <td colspan="5" class="p-8 text-center text-gray-400">Loading staff data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Village Monitoring Matrix -->
+        <div class="section-card reveal">
+            <div class="section-header">
+                <h3 class="text-lg font-bold text-indigo-900">🗺️ Village Monitoring Matrix</h3>
+                <button onclick="refreshData()"
+                    class="p-2 hover:bg-red-950 rounded-xl text-red-400 transition-all hover:rotate-180 duration-300">
+                    <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead style="background:linear-gradient(90deg,rgba(99,102,241,0.06),rgba(168,85,247,0.04))">
+                        <tr>
+                            <th class="p-4 text-xs font-bold text-red-500 uppercase tracking-wider">Village Name</th>
+                            <th class="p-4 text-xs font-bold text-red-500 uppercase tracking-wider">Total Cases</th>
+                            <th class="p-4 text-xs font-bold text-red-500 uppercase tracking-wider">Risk Level</th>
+                            <th class="p-4 text-xs font-bold text-red-500 uppercase tracking-wider">Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody id="village-table-body" class="divide-y divide-indigo-50"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Manage Villages -->
+        <div class="section-card reveal">
+            <div class="section-header">
+                <div>
+                    <h3 class="text-lg font-bold text-indigo-900">✏️ Manage & Rename Villages</h3>
+                    <p class="text-sm text-gray-400 mt-0.5">Correct typos or update village names across the system.</p>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead style="background:linear-gradient(90deg,rgba(99,102,241,0.06),rgba(168,85,247,0.04))">
+                        <tr>
+                            <th class="p-4 text-xs font-bold text-red-500 uppercase tracking-wider">ID</th>
+                            <th class="p-4 text-xs font-bold text-red-500 uppercase tracking-wider">Original Name
+                            </th>
+                            <th class="p-4 text-xs font-bold text-red-500 uppercase tracking-wider">District</th>
+                            <th class="p-4 text-xs font-bold text-red-500 uppercase tracking-wider">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="manage-villages-body" class="divide-y divide-indigo-50"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Edit Village Modal -->
+    <div id="editVillageModal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-backdrop">
+        <div class="modal-enter bg-gray-950 rounded-2xl p-8 max-w-md w-full shadow-2xl border border-indigo-100">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-red-950 rounded-xl flex items-center justify-center">
+                    <i data-lucide="edit-3" class="w-5 h-5 text-red-500"></i>
+                </div>
+                <h3 class="text-xl font-bold text-indigo-900">Rename Village</h3>
+            </div>
+            <input type="hidden" id="edit-village-id">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-600 mb-1.5">New Village Name</label>
+                    <input type="text" id="edit-village-name"
+                        class="w-full px-4 py-2.5 border border-red-900 rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent outline-none text-gray-200 transition-all">
+                </div>
+                <div class="flex gap-3 pt-2">
+                    <button onclick="saveVillageRename()"
+                        class="flex-1 btn-ripple bg-gradient-to-r from-red-700 to-purple-600 text-white py-2.5 rounded-xl font-bold hover:from-indigo-700 hover:to-red-800 shadow-lg shadow-indigo-200 transition-all">
+                        Save Changes
+                    </button>
+                    <button onclick="closeEditModal()"
+                        class="flex-1 bg-gray-900 text-gray-600 py-2.5 rounded-xl font-bold hover:bg-gray-800 transition-all">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Scroll reveal observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('/api/admin/risk-status');
+                const data = await response.json();
+
+                let totalCases = 0, highRisk = 0;
+                const riskCounts = { LOW: 0, MEDIUM: 0, HIGH: 0 };
+
+                const tableBody = document.getElementById('village-table-body');
+                tableBody.innerHTML = '';
+                const manageBody = document.getElementById('manage-villages-body');
+                manageBody.innerHTML = '';
+
+                data.forEach((v, i) => {
+                    totalCases += v.total_cases;
+                    if (v.risk_level === 'HIGH') highRisk++;
+                    riskCounts[v.risk_level]++;
+
+                    const riskClass = v.risk_level === 'HIGH' ? 'risk-badge-high' :
+                        v.risk_level === 'MEDIUM' ? 'risk-badge-medium' : 'risk-badge-low';
+
+                    const row = document.createElement('tr');
+                    row.style.animationDelay = `${i * 0.05}s`;
+                    row.innerHTML = `
+                        <td class="p-4 font-semibold text-gray-200">${v.village_name}</td>
+                        <td class="p-4 text-gray-600">${v.total_cases}</td>
+                        <td class="p-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold ${riskClass}">${v.risk_level}</span>
+                        </td>
+                        <td class="p-4 text-sm text-gray-500">${v.reason}</td>
+                    `;
+                    tableBody.appendChild(row);
+
+                    const mRow = document.createElement('tr');
+                    mRow.innerHTML = `
+                        <td class="p-4 text-gray-400 text-xs font-mono">${v.village_id}</td>
+                        <td class="p-4 font-semibold text-gray-200">${v.village_name}</td>
+                        <td class="p-4 text-gray-500">District A</td>
+                        <td class="p-4">
+                            <button onclick="openEditModal(${v.village_id}, '${v.village_name}')"
+                                class="flex items-center gap-1.5 text-red-500 hover:text-indigo-800 font-bold text-sm px-3 py-1.5 rounded-lg bg-red-950 hover:bg-red-950 border border-indigo-100 transition-all">
+                                <i data-lucide="edit-3" class="w-4 h-4"></i> Rename
+                            </button>
+                        </td>
+                    `;
+                    manageBody.appendChild(mRow);
+                });
+                lucide.createIcons();
+
+                animateNumber('total-villages', data.length);
+                animateNumber('total-cases', totalCases);
+                animateNumber('high-risk-count', highRisk);
+                updateRiskChart(riskCounts);
+                loadAlerts();
+                loadStaffData();
+            } catch (error) { console.error('Error loading data:', error); }
+        }
+
+        function animateNumber(id, target) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            let start = 0;
+            const duration = 900;
+            const step = (timestamp) => {
+                if (!start) start = timestamp;
+                const progress = Math.min((timestamp - start) / duration, 1);
+                el.textContent = Math.round(progress * target);
+                if (progress < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+        }
+
+        async function loadStaffData() {
+            try {
+                const response = await fetch('/api/admin/staff');
+                const staff = await response.json();
+                const tableBody = document.getElementById('staff-table-body');
+                tableBody.innerHTML = '';
+
+                if (staff.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="5" class="p-8 text-center text-gray-400">No ASHA workers or volunteers registered yet.</td></tr>';
+                    return;
+                }
+
+                staff.forEach((member, i) => {
+                    const row = document.createElement('tr');
+                    row.className = 'animate-fade-in';
+                    row.style.animationDelay = `${i * 0.07}s`;
+                    const roleLabel = member.role === 'asha_worker' ? 'ASHA Worker' : 'Volunteer';
+                    const roleClass = member.role === 'asha_worker'
+                        ? 'bg-red-950 text-red-600 border border-red-900'
+                        : 'bg-purple-100 text-red-600 border border-purple-200';
+
+                    row.innerHTML = `
+                        <td class="p-4 font-semibold text-gray-200">${member.full_name || 'N/A'}</td>
+                        <td class="p-4">
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${roleClass}">${roleLabel}</span>
+                        </td>
+                        <td class="p-4 font-mono text-sm text-gray-600">${member.phone_number || 'No contact info'}</td>
+                        <td class="p-4 text-gray-600">${member.village_name || 'Global'}</td>
+                        <td class="p-4">
+                            <button onclick="deleteStaff(${member.id}, '${member.full_name || 'this member'}')" class="delete-btn">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Delete
+                            </button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+                lucide.createIcons();
+            } catch (error) { console.error('Error loading staff data:', error); }
+        }
+
+        async function deleteStaff(userId, name) {
+            if (!confirm(`Are you sure you want to delete "${name}" from the system?`)) return;
+            try {
+                const response = await fetch(`/api/admin/staff/${userId}`, { method: 'DELETE' });
+                const result = await response.json();
+                if (result.success) loadStaffData();
+                else alert('Error: ' + result.error);
+            } catch (error) { console.error('Delete error:', error); }
+        }
+
+        async function loadAlerts() {
+            try {
+                const response = await fetch('/api/alerts');
+                const alerts = await response.json();
+                const container = document.getElementById('alerts-container');
+                container.innerHTML = '';
+
+                const badge = document.getElementById('active-alerts');
+                if (badge) animateNumber('active-alerts', alerts.length);
+
+                const highAlert = alerts.find(a => a.risk_level === 'HIGH');
+                const notification = document.getElementById('high-risk-notification');
+                if (highAlert) {
+                    notification.classList.remove('hidden');
+                    document.getElementById('notification-message').textContent = `${highAlert.village_name}: ${highAlert.message}`;
+                } else {
+                    notification.classList.add('hidden');
+                }
+
+                if (alerts.length === 0) {
+                    container.innerHTML = '<div class="col-span-3 p-8 text-center text-gray-400">No active alerts at this time. ✅</div>';
+                    return;
+                }
+
+                alerts.forEach((a, i) => {
+                    const div = document.createElement('div');
+                    div.className = `rounded-xl p-4 flex justify-between items-start notification-slide ${a.risk_level === 'HIGH' ? 'alert-card-high' : 'alert-card-medium'
+                        }`;
+                    div.style.animationDelay = `${i * 0.07}s`;
+                    div.innerHTML = `
+                        <div>
+                            <p class="font-bold text-gray-100 flex items-center gap-2">
+                                ${a.risk_level === 'HIGH' ? '🔴' : '🟡'} ${a.village_name}: ${a.risk_level} Risk
+                            </p>
+                            <p class="text-sm text-gray-600 mt-1">${a.message}</p>
+                        </div>
+                        <span class="text-xs text-gray-400 whitespace-nowrap ml-3 mt-0.5">${new Date(a.created_at).toLocaleString()}</span>
+                    `;
+                    container.appendChild(div);
+                });
+            } catch (error) { console.error('Error loading alerts:', error); }
+        }
+
+        let riskChart;
+        function updateRiskChart(counts) {
+            const ctx = document.getElementById('riskChart').getContext('2d');
+            if (riskChart) riskChart.destroy();
+            riskChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Low Risk', 'Medium Risk', 'High Risk'],
+                    datasets: [{
+                        data: [counts.LOW, counts.MEDIUM, counts.HIGH],
+                        backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+                        borderWidth: 3,
+                        borderColor: '#fff',
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    plugins: { legend: { position: 'bottom', labels: { padding: 16, font: { family: 'Poppins', weight: '600' } } } },
+                    cutout: '65%',
+                    animation: { animateScale: true, duration: 1200 }
+                }
+            });
+        }
+
+        async function loadDiseaseChart() {
+            try {
+                const response = await fetch('/api/admin/disease-distribution');
+                const data = await response.json();
+                const labels = data.map(d => d.disease_type);
+                const counts = data.map(d => d.count);
+                const ctx = document.getElementById('diseaseChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels.length > 0 ? labels : ['No Data'],
+                        datasets: [{
+                            label: 'Reported Cases (7 Days)',
+                            data: counts.length > 0 ? counts : [0],
+                            backgroundColor: [
+                                'rgba(99,102,241,0.8)', 'rgba(168,85,247,0.8)',
+                                'rgba(236,72,153,0.8)', 'rgba(245,158,11,0.8)',
+                                'rgba(16,185,129,0.8)'
+                            ],
+                            borderRadius: 8,
+                            borderSkipped: false
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: { beginAtZero: true, ticks: { stepSize: 1, font: { family: 'Poppins' } }, grid: { color: 'rgba(99,102,241,0.07)' } },
+                            x: { ticks: { font: { family: 'Poppins' } }, grid: { display: false } }
+                        },
+                        plugins: { legend: { labels: { font: { family: 'Poppins', weight: '600' } } } },
+                        animation: { duration: 1200, easing: 'easeOutQuart' }
+                    }
+                });
+            } catch (error) { console.error('Disease chart error:', error); }
+        }
+        loadDiseaseChart();
+
+        function logout() { window.location.href = 'index.html'; }
+        function refreshData() { loadDashboardData(); }
+
+        function openEditModal(id, name) {
+            document.getElementById('edit-village-id').value = id;
+            document.getElementById('edit-village-name').value = name;
+            const modal = document.getElementById('editVillageModal');
+            modal.classList.remove('hidden');
+            modal.querySelector('.modal-enter').style.animation = 'none';
+            void modal.querySelector('.modal-enter').offsetWidth;
+            modal.querySelector('.modal-enter').style.animation = '';
+        }
+        function closeEditModal() { document.getElementById('editVillageModal').classList.add('hidden'); }
+
+        async function saveVillageRename() {
+            const id = document.getElementById('edit-village-id').value;
+            const newName = document.getElementById('edit-village-name').value;
+            try {
+                const response = await fetch('/api/admin/villages/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ village_id: id, new_name: newName })
+                });
+                if (response.ok) {
+                    closeEditModal();
+                    loadDashboardData();
+                } else {
+                    const error = await response.json();
+                    alert('Error: ' + error.error);
+                }
+            } catch (err) { console.error('Rename error:', err); }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            loadDashboardData();
+            setInterval(loadDashboardData, 10000);
+        });
+    </script>
+    <!-- Chatbot Widget -->
+    <script src="chatbot.js"></script>
+</body>
+
+
+</html>
