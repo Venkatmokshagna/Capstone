@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  # ── MySQL Database ─────────────────────────────────────────────
+  db:
+    image: mysql:8.0
+    container_name: waterborne_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-Nani1118@}
+      MYSQL_DATABASE: ${DB_NAME:-waterborne_db}
+    ports:
+      - "3307:3306" # host 3307 → container 3306 (avoids clash with local MySQL)
+    volumes:
+      - db_data:/var/lib/mysql # persistent data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql # auto-run on first start
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD:-Nani1118@}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # ── Flask Web App ──────────────────────────────────────────────
+  web:
+    build: .
+    container_name: waterborne_web
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_USER: ${DB_USER:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-Nani1118@}
+      DB_NAME: ${DB_NAME:-waterborne_db}
+      DB_PORT: 3306
+      SECRET_KEY: ${SECRET_KEY:-fallback-secret-key-2024}
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./static:/app/static # live-reload static files without rebuild
+
+volumes:
+  db_data:

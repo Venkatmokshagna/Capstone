@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Water Analysis | Samaj Health Suraksha</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --danger: #ef4444;
+            --success: #10b981;
+            --border: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            background-image: radial-gradient(circle at top right, #1e3a8a 0%, transparent 40%),
+                              radial-gradient(circle at bottom left, #064e3b 0%, transparent 40%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .header {
+            margin-bottom: 2rem;
+        }
+
+        .title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #60a5fa, #34d399);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        .upload-area:hover, .upload-area.dragover {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.7;
+        }
+
+        #imageInput {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        #preview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 12px;
+            display: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            z-index: 5;
+            position: relative;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary), #3b82f6);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .result-box {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.8);
+            display: none;
+            animation: fadeIn 0.5s ease;
+            border-left: 4px solid transparent;
+            text-align: left;
+        }
+
+        .result-box.success {
+            border-left-color: var(--success);
+        }
+
+        .result-box.danger {
+            border-left-color: var(--danger);
+        }
+
+        .result-status {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .result-detail {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+        }
+
+        .result-detail span:last-child {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .advice {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .disclaimer {
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+            background: rgba(0,0,0,0.2);
+            padding: 0.75rem;
+            border-radius: 8px;
+        }
+
+        .loader {
+            display: none;
+            width: 48px;
+            height: 48px;
+            border: 5px solid var(--border);
+            border-bottom-color: var(--primary);
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+            margin: 1rem auto;
+            display: none;
+        }
+
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <div class="header">
+            <h2 class="title">AI Water Analysis</h2>
+            <p class="subtitle">Upload a photo to detect visual contamination</p>
+        </div>
+
+        <div class="upload-area" id="dropZone">
+            <div id="uploadPrompt">
+                <div class="upload-icon">📸</div>
+                <p>Drag & Drop or <strong>Click to Upload</strong></p>
+            </div>
+            <input type="file" id="imageInput" accept="image/jpeg, image/png, image/jpg">
+            <img id="preview" alt="Water sample preview">
+        </div>
+
+        <button id="analyzeBtn" class="btn" disabled onclick="uploadImage()">Analyze Water</button>
+        
+        <span class="loader" id="loader"></span>
+
+        <div id="result" class="result-box">
+            <div id="statusIcon" class="result-status"></div>
+            
+            <div class="result-detail">
+                <span>Drinkable Assessment:</span>
+                <span id="drinkableLabel"></span>
+            </div>
+            <div class="result-detail">
+                <span>Contamination Probability:</span>
+                <span id="probLabel"></span>
+            </div>
+            <div class="result-detail">
+                <span>AI Confidence:</span>
+                <span id="confLabel"></span>
+            </div>
+            
+            <div class="advice" id="adviceText"></div>
+        </div>
+
+        <div class="disclaimer">
+            <strong>⚠️ IMPORTANT:</strong> This AI analysis is based on visual appearance only. It CANNOT detect invisible microorganisms, viruses, or chemical contamination. Always use proper water testing equipment for conclusive safety.
+        </div>
+    </div>
+</div>
+
+<script>
+    const input = document.getElementById("imageInput");
+    const preview = document.getElementById("preview");
+    const uploadPrompt = document.getElementById("uploadPrompt");
+    const analyzeBtn = document.getElementById("analyzeBtn");
+    const dropZone = document.getElementById("dropZone");
+    const loader = document.getElementById("loader");
+    const resultBox = document.getElementById("result");
+
+    // Drag and drop behavior
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        if (e.dataTransfer.files.length) {
+            input.files = e.dataTransfer.files;
+            handleFile();
+        }
+    });
+
+    input.onchange = handleFile;
+
+    function handleFile() {
+        const file = input.files[0];
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+            uploadPrompt.style.display = 'none';
+            analyzeBtn.disabled = false;
+            resultBox.style.display = 'none'; // hide previous results
+        }
+    }
+
+    async function uploadImage() {
+        const file = input.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        analyzeBtn.style.display = 'none';
+        loader.style.display = 'block';
+        resultBox.style.display = 'none';
+
+        try {
+            const response = await fetch("/api/analyze-water", {
+                method: "POST",
+                body: formData
+            });
+            const data = await response.json();
+            
+            loader.style.display = 'none';
+            analyzeBtn.style.display = 'block';
+            analyzeBtn.textContent = 'Analyze Another Image';
+            
+            if(data.error) {
+                alert("Error: " + data.error);
+                return;
+            }
+
+            // Display Results
+            resultBox.style.display = 'block';
+            
+            const isDrinkable = data.drinkable;
+            resultBox.className = 'result-box ' + (isDrinkable ? 'success' : 'danger');
+            
+            document.getElementById('statusIcon').innerHTML = isDrinkable ? 
+                '✅ <span style="color: var(--success)">Appears Clean</span>' : 
+                '❌ <span style="color: var(--danger)">Visually Contaminated</span>';
+                
+            document.getElementById('drinkableLabel').textContent = isDrinkable ? 'Yes (Visually)' : 'No';
+            document.getElementById('drinkableLabel').style.color = isDrinkable ? 'var(--success)' : 'var(--danger)';
+            
+            document.getElementById('probLabel').textContent = `${(data.contamination_probability * 100).toFixed(1)}%`;
+            document.getElementById('confLabel').textContent = `${(data.confidence * 100).toFixed(1)}%`;
+            
+            document.getElementById('adviceText').innerHTML = `<strong>Advice:</strong> ${data.advice}`;
+
+        } catch (err) {
+            loader.style.display = 'none';
+            analyzeBtn.style.display = 'block';
+            alert('Analysis failed. Is the backend running with the ML model?');
+            console.error(err);
+        }
+    }
+</script>
+
+</body>
+</html>

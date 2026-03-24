@@ -1,0 +1,27 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Environment secrets
+.env
+
+# IDE / editor
+.vscode/
+.hintrc
+*.md
+
+# Docker itself
+Dockerfile
+docker-compose.yml
+.dockerignore

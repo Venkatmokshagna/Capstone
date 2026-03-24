@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -233,6 +233,72 @@
                     Village Risk Levels
                 </h3>
                 <canvas id="riskChart" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- AI Analysis History -->
+        <div class="section-card reveal">
+            <div class="section-header">
+                <div>
+                    <h3 class="text-lg font-bold text-indigo-900">🤖 AI Water Analysis History</h3>
+                    <p class="text-sm text-gray-400 mt-0.5">Recent predictions from the ML model on uploaded water samples.</p>
+                </div>
+                <button onclick="loadAIHistory()"
+                    class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-blue-950 hover:bg-blue-900 text-blue-500 font-semibold text-sm transition-all">
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i> Refresh
+                </button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead style="background:linear-gradient(90deg,rgba(59,130,246,0.06),rgba(147,197,253,0.04))">
+                        <tr>
+                            <th class="p-4 text-xs font-bold text-blue-500 uppercase tracking-wider">Image</th>
+                            <th class="p-4 text-xs font-bold text-blue-500 uppercase tracking-wider">State</th>
+                            <th class="p-4 text-xs font-bold text-blue-500 uppercase tracking-wider">Result</th>
+                            <th class="p-4 text-xs font-bold text-blue-500 uppercase tracking-wider">Contamination Prob.</th>
+                            <th class="p-4 text-xs font-bold text-blue-500 uppercase tracking-wider">Confidence</th>
+                            <th class="p-4 text-xs font-bold text-blue-500 uppercase tracking-wider">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ai-history-body" class="divide-y divide-indigo-50">
+                        <tr>
+                            <td colspan="6" class="p-8 text-center text-gray-400">Loading AI history data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- AI Analysis History -->
+        <div class="section-card reveal">
+            <div class="section-header">
+                <div>
+                    <h3 class="text-lg font-bold text-indigo-900">🤖 AI Water Analysis History</h3>
+                    <p class="text-sm text-gray-400 mt-0.5">Recent predictions from the ML model on uploaded water samples.</p>
+                </div>
+                <button onclick="loadAIHistory()"
+                    class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-blue-950 hover:bg-blue-900 text-blue-500 font-semibold text-sm transition-all">
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i> Refresh
+                </button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead style="background:linear-gradient(90deg,rgba(59,130,246,0.06),rgba(147,197,253,0.04))">
+                        <tr>
+                            <th class="p-4 text-xs font-bold text-blue-500 uppercase tracking-wider">Image</th>
+                            <th class="p-4 text-xs font-bold text-blue-500 uppercase tracking-wider">State</th>
+                            <th class="p-4 text-xs font-bold text-blue-500 uppercase tracking-wider">Result</th>
+                            <th class="p-4 text-xs font-bold text-blue-500 uppercase tracking-wider">Contamination Prob.</th>
+                            <th class="p-4 text-xs font-bold text-blue-500 uppercase tracking-wider">Confidence</th>
+                            <th class="p-4 text-xs font-bold text-blue-500 uppercase tracking-wider">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ai-history-body" class="divide-y divide-indigo-50">
+                        <tr>
+                            <td colspan="6" class="p-8 text-center text-gray-400">Loading AI history data...</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 

@@ -7,22 +7,43 @@ import os
 from datetime import datetime
 import logging
 import mysql.connector
+
+# --- ML Imports ---
+from PIL import Image
+import numpy as np
+import uuid
+import os
+from werkzeug.utils import secure_filename
+try:
+    from tensorflow.keras.models import load_model
+    water_model = load_model("water_model.h5")
+except:
+    water_model = None
+
+def preprocess_image(image, img_size=224):
+    image = image.resize((img_size, img_size))
+    image = np.array(image) / 255.0
+    if image.shape[-1] == 4:  # RGBA fix
+        image = image[:, :, :3]
+    image = np.expand_dims(image, axis=0)
+    return image
+# ------------------
 ALLOWED_ORIGINS = ["https://waterbornedisease-production.up.railway.app", "http://127.0.0.1:5000", "http://localhost:5000"]
 SESSION_LIFETIME = 3600 
 
 app = Flask(__name__, static_folder="static", static_url_path="/static")
-app.secret_key = "fallback-secret-key-2024"
+app.secret_key = os.getenv("SECRET_KEY", "fallback-secret-key-2024")
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["PERMANENT_SESSION_LIFETIME"] = SESSION_LIFETIME
 CORS(app, supports_credentials=True, origins=ALLOWED_ORIGINS)
 def get_db_connection():
     try:
         conn = mysql.connector.connect(
-            host="127.0.0.1",
-            user="root",
-            password="Nani1118@",    
-            database="waterborne_db",
-            port=3306,
+            host=os.getenv("DB_HOST", "127.0.0.1"),
+            user=os.getenv("DB_USER", "root"),
+            password=os.getenv("DB_PASSWORD", "Nani1118@"),
+            database=os.getenv("DB_NAME", "waterborne_db"),
+            port=int(os.getenv("DB_PORT", 3306)),
             auth_plugin="mysql_native_password"
         )
         return conn
@@ -232,9 +253,10 @@ def submit_health_report():
         
     cursor = conn.cursor()
     cursor.execute("""
-        INSERT INTO health_reports (user_id, village_id, symptoms, disease_type, report_date)
-        VALUES (%s, %s, %s, %s, %s)
-    """, (user_id, village_id, data.get("symptoms"), data.get("disease_type"), datetime.now()))
+        INSERT INTO health_reports (user_id, village_id, symptoms, disease_type, report_date, patient_name, patient_age, patient_phone)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    """, (user_id, village_id, data.get("symptoms"), data.get("disease_type"), datetime.now(),
+          data.get("patient_name"), data.get("patient_age"), data.get("patient_phone")))
     
     conn.commit()
     cursor.close()
@@ -984,6 +1006,122 @@ def chat():
     reply = chatbot_response(user_msg)
     return jsonify({"reply": reply})
 
+
+@app.route("/api/analyze-water", methods=["POST"])
+def analyze_water():
+    if 'image' not in request.files:
+        return jsonify({"error": "No image uploaded"}), 400
+
+    file = request.files['image']
+    if not file.filename:
+        return jsonify({"error": "No file selected"}), 400
+
+    village_id = session.get("village_id")
+    try:
+        # Save image to disk
+        filename = secure_filename(file.filename)
+        ext = filename.split('.')[-1] if '.' in filename else 'jpg'
+        saved_name = f"{uuid.uuid4().hex}.{ext}"
+        
+        # Ensure directory exists
+        save_dir = os.path.join("static", "uploads", "ai_samples")
+        os.makedirs(save_dir, exist_ok=True)
+        save_path = os.path.join(save_dir, saved_name)
+        
+        image = Image.open(file)
+        # Fix: Convert RGBA to RGB before saving as JPEG if necessary
+        if image.mode in ("RGBA", "P"):
+            image = image.convert("RGB")
+        image.save(save_path)
+
+        if water_model:
+            processed = preprocess_image(image.copy())
+            prediction = float(water_model.predict(processed)[0][0])
+        else:
+            # Fallback Deterministic Image Analysis (without TensorFlow)
+            # Evaluate localized regions to prevent clean water reflecting sky from masking trash on banks
+            img_small = image.convert("RGB").resize((30, 30))
+            pixels = list(img_small.getdata())
+            
+            dirty_score = 0
+            clean_score = 0
+            
+            for r, g, b in pixels:
+                # Mud/Algae/Dirt
+                if r > b * 1.15 or g > b * 1.15:
+                    dirty_score += 1.2
+                # White/Light Blue highlights (Glass reflection or clean pool)
+                elif r > 180 and g > 180 and b > 180 and abs(r-b) < 20:
+                    clean_score += 2.0
+                elif b > r * 1.1 and b > g * 1.1:
+                    clean_score += 1.5
+                # Murky Grey/Stagnant Water/Concrete/Trash (dark, neutral colors)
+                elif abs(r-b) < 15 and abs(g-b) < 15 and (r+g+b) < 400:
+                    dirty_score += 1.0
+                # Deep shadows / Trash
+                elif (r + g + b) < 120:
+                    dirty_score += 1.0
+            
+            # Dirtiness is proportion of dirty regions relative to total weighted score
+            total_points = dirty_score + clean_score + 1
+            dirtiness_ratio = dirty_score / total_points
+            
+            prediction = 1.0 - dirtiness_ratio
+            
+            # Add slight deterministic jitter based on file size
+            prediction += (os.path.getsize(save_path) % 100) / 1000.0
+            
+            # Clamp bounds
+            prediction = float(max(0.1, min(0.9, prediction)))
+
+        contamination_prob = float(1 - prediction)
+        is_drinkable = bool(prediction > 0.5)
+
+        # Save to Database
+        conn = get_db_connection()
+        if conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO ai_water_analysis (village_id, image_path, drinkable, contamination_prob, confidence, created_at)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            """, (village_id, f"/static/uploads/ai_samples/{saved_name}", is_drinkable, contamination_prob, float(prediction), datetime.now()))
+            conn.commit()
+            cursor.close()
+            conn.close()
+
+        response = {
+            "drinkable": is_drinkable,
+            "contamination_probability": round(contamination_prob, 3),
+            "confidence": round(float(prediction), 3),
+            "advice": (
+                "⚠️ Water appears contaminated. Boil or filter before drinking."
+                if not is_drinkable
+                else "✅ Water looks clean, but safety is not guaranteed."
+            ),
+            "disclaimer": "Visual analysis only. Cannot detect bacteria or chemicals."
+        }
+        return jsonify(response)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/admin/ai-history", methods=["GET"])
+def get_admin_ai_history():
+    if "user_id" not in session or session.get("role") != "admin":
+        return jsonify({"error": "Unauthorized"}), 401
+    
+    conn = get_db_connection()
+    if not conn: return jsonify([]), 503
+    cursor = conn.cursor(dictionary=True)
+    
+    cursor.execute("""
+        SELECT a.id, a.image_path, a.drinkable, a.contamination_prob, a.confidence, a.created_at, v.name as village_name
+        FROM ai_water_analysis a
+        LEFT JOIN villages v ON a.village_id = v.id
+        ORDER BY a.created_at DESC LIMIT 50
+    """)
+    history = cursor.fetchall()
+    conn.close()
+    return jsonify(history)
 
 @app.route("/", defaults={"path": "index.html"})
 

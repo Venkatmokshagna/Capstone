@@ -323,7 +323,7 @@ async function loadVillages() {
             villages.forEach(v => {
                 const option = document.createElement('option');
                 option.value = v.id;
-                option.textContent = `${v.name} (${v.district})`;
+                option.textContent = `${v.name}`;
                 villageSelect.appendChild(option);
             });
         }
