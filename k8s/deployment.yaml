@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: waterborne-app
+  labels:
+    app: waterborne-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: waterborne-app
+  template:
+    metadata:
+      labels:
+        app: waterborne-app
+    spec:
+      containers:
+        - name: waterborne-app
+          image: gcr.io/YOUR_PROJECT_ID/waterborne-app:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: waterborne-secret
+                  key: DB_HOST
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: waterborne-secret
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: waterborne-secret
+                  key: DB_PASSWORD
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: waterborne-secret
+                  key: DB_NAME
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: waterborne-secret
+                  key: DB_PORT
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: waterborne-secret
+                  key: SECRET_KEY
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 20
+            periodSeconds: 15

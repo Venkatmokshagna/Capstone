@@ -23,6 +23,7 @@ wheels/
 
 # Virtual Environment
 venv/
+.venv/
 ENV/
 
 # VS Code
@@ -34,3 +35,6 @@ ENV/
 # Database (if local)
 *.sqlite3
 instance/
+
+# Kubernetes Secrets (never commit real credentials)
+k8s/secret.yaml

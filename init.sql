@@ -1,18 +1,9 @@
--- ============================================================
--- Waterborne Disease Monitoring System — Database Initialization
--- This file is automatically run by MySQL on first container start.
--- ============================================================
-
 CREATE DATABASE IF NOT EXISTS waterborne_db;
 USE waterborne_db;
-
--- ── Villages ────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS villages (
     id   INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL
 );
-
--- Seed North East India regions
 INSERT IGNORE INTO villages (id, name) VALUES
     (1, 'Assam'),
     (2, 'Arunachal Pradesh'),
@@ -24,8 +15,6 @@ INSERT IGNORE INTO villages (id, name) VALUES
     (8, 'Tripura'),
     (9, 'Bodoland Territorial Region'),
     (10, 'Karbi Anglong');
-
--- ── Users ────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS users (
     id           INT AUTO_INCREMENT PRIMARY KEY,
     full_name    VARCHAR(100),
@@ -38,8 +27,6 @@ CREATE TABLE IF NOT EXISTS users (
     created_at   DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (village_id) REFERENCES villages(id)
 );
-
--- ── Health Reports ───────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS health_reports (
     id           INT AUTO_INCREMENT PRIMARY KEY,
     user_id      INT,
@@ -53,8 +40,6 @@ CREATE TABLE IF NOT EXISTS health_reports (
     FOREIGN KEY (user_id)    REFERENCES users(id),
     FOREIGN KEY (village_id) REFERENCES villages(id)
 );
-
--- ── Water Reports ────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS water_reports (
     id                 INT AUTO_INCREMENT PRIMARY KEY,
     village_id         INT,
@@ -64,8 +49,6 @@ CREATE TABLE IF NOT EXISTS water_reports (
     report_date        DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (village_id) REFERENCES villages(id)
 );
-
--- ── Alerts ───────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS alerts (
     id         INT AUTO_INCREMENT PRIMARY KEY,
     village_id INT,
@@ -74,8 +57,6 @@ CREATE TABLE IF NOT EXISTS alerts (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (village_id) REFERENCES villages(id)
 );
-
--- ── AI Water Analysis History ────────────────────────────────────
 CREATE TABLE IF NOT EXISTS ai_water_analysis (
     id                 INT AUTO_INCREMENT PRIMARY KEY,
     village_id         INT,

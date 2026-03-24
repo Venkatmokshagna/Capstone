@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,23 +8,18 @@
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <link rel="stylesheet" href="style.css">
     <style id="dark-theme-override">
-        /* ===== DARK MODE FORCED OVERRIDE ===== */
         html,
         body {
             background: #0a0a0a !important;
             color: #f5f5f5 !important;
             min-height: 100vh;
         }
-
-        /* Nav */
         nav,
         .nav-glass {
             background: rgba(8, 0, 0, 0.92) !important;
             border-bottom: 1px solid rgba(220, 38, 38, 0.20) !important;
             box-shadow: 0 2px 20px rgba(220, 38, 38, 0.12) !important;
         }
-
-        /* Cards & Sections */
         .stat-card-inner,
         .section-card,
         .light-card,
@@ -35,36 +29,27 @@
             border-color: rgba(220, 38, 38, 0.18) !important;
             color: #f5f5f5 !important;
         }
-
         .section-header {
             background: linear-gradient(90deg, rgba(220, 38, 38, 0.07), transparent) !important;
             border-bottom: 1px solid rgba(220, 38, 38, 0.12) !important;
         }
-
-        /* Stat numbers */
         .stat-num {
             color: #ef4444 !important;
         }
-
-        /* Tables */
         table th {
             color: #f87171 !important;
             background: rgba(220, 38, 38, 0.10) !important;
             font-size: 0.7rem !important;
             letter-spacing: 0.08em !important;
         }
-
         table td {
             color: #e5e7eb !important;
             border-bottom: 1px solid rgba(220, 38, 38, 0.08) !important;
         }
-
         table tbody tr:hover td {
             color: #fff !important;
             background: rgba(220, 38, 38, 0.07) !important;
         }
-
-        /* Text visibility */
         h1,
         h2,
         h3,
@@ -73,47 +58,36 @@
         h6 {
             color: #f5f5f5 !important;
         }
-
         .text-gray-900,
         .text-gray-800,
         .text-gray-700,
         .text-gray-600 {
             color: #d1d5db !important;
         }
-
         .text-gray-500 {
             color: #9ca3af !important;
         }
-
         .text-gray-400 {
             color: #a3a3a3 !important;
         }
-
-        /* BG overrides */
         .bg-white,
         .bg-gray-50,
         .bg-gray-100 {
             background-color: #111111 !important;
         }
-
         .bg-gray-200 {
             background-color: #1a1a1a !important;
         }
-
         .bg-gray-800,
         .bg-gray-900,
         .bg-gray-950 {
             background-color: #0a0a0a !important;
         }
-
-        /* Borders */
         .border-gray-100,
         .border-gray-200,
         .border-gray-300 {
             border-color: rgba(220, 38, 38, 0.12) !important;
         }
-
-        /* Inputs */
         input,
         select,
         textarea {
@@ -121,56 +95,43 @@
             color: #f5f5f5 !important;
             border-color: rgba(220, 38, 38, 0.25) !important;
         }
-
         input::placeholder {
             color: #6b7280 !important;
         }
-
-        /* Badges */
         .risk-badge-high {
             background: linear-gradient(135deg, #450a0a, #7f1d1d) !important;
             color: #fca5a5 !important;
             border: 1px solid rgba(239, 68, 68, 0.4) !important;
         }
-
         .risk-badge-medium {
             background: linear-gradient(135deg, #431407, #7c2d12) !important;
             color: #fdba74 !important;
             border: 1px solid rgba(249, 115, 22, 0.4) !important;
         }
-
         .risk-badge-low {
             background: linear-gradient(135deg, #052e16, #14532d) !important;
             color: #86efac !important;
             border: 1px solid rgba(34, 197, 94, 0.3) !important;
         }
-
-        /* Alert cards */
         .alert-card-high {
             border-left: 4px solid #ef4444 !important;
             background: #130505 !important;
             color: #fca5a5 !important;
         }
-
         .alert-card-medium {
             border-left: 4px solid #f59e0b !important;
             background: #130c00 !important;
             color: #fde68a !important;
         }
-
-        /* Buttons */
         button,
         .btn {
             color: inherit;
         }
-
-        /* Main body gradient */
         body {
             background: linear-gradient(135deg, #0a0a0a 0%, #110000 50%, #0f0505 100%) !important;
         }
     </style>
 </head>
-
 <body class="bg-gray-950 dark:bg-gray-900 min-h-screen">
     <nav
         class="bg-gray-950 dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 p-4 sticky top-0 z-50">
@@ -199,7 +160,6 @@
             </div>
         </div>
     </nav>
-
     <main class="container mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="space-y-6">
             <div
@@ -212,8 +172,6 @@
                 <p id="risk-reason" class="text-sm text-gray-600 dark:text-gray-400">Fetching latest status...</p>
             </div>
         </div>
-
-        <!-- Right: Report Form -->
         <div class="lg:col-span-2 space-y-6">
             <div
                 class="bg-gray-950 dark:bg-gray-800 p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
@@ -222,7 +180,6 @@
                     Add Health Report
                 </h2>
                 <form id="health-report-form" class="space-y-6">
-                    <!-- Patient Details Row -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">Patient
@@ -243,7 +200,6 @@
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                         </div>
                     </div>
-                    <!-- Report Details Row -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-300 dark:text-gray-300 mb-1">State</label>
@@ -277,19 +233,15 @@
                     </button>
                 </form>
             </div>
-
             <div
                 class="bg-gray-950 dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
                 <h3 class="text-lg font-bold mb-4 dark:text-white">State Reports Feed</h3>
                 <div id="reports-feed" class="divide-y divide-gray-100 dark:divide-gray-700">
-                    <!-- Reports will appear here -->
                 </div>
             </div>
         </div>
         </div>
     </main>
-
-    <!-- Change Village Modal -->
     <div id="changeVillageModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50">
         <div class="bg-gray-950 dark:bg-gray-800 rounded-2xl p-8 max-w-md w-full shadow-2xl">
             <h3 class="text-2xl font-bold mb-4 dark:text-white">Change Your State</h3>
@@ -314,7 +266,6 @@
             </div>
         </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
@@ -322,25 +273,20 @@
             loadVillages();
             loadRiskStatus();
             loadReportsFeed();
-
-            // Auto-refresh every 15 seconds
             setInterval(() => {
                 loadRiskStatus();
                 loadReportsFeed();
             }, 15000);
-
             document.getElementById('health-report-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const formData = new FormData(e.target);
                 const data = Object.fromEntries(formData.entries());
-
                 try {
                     const response = await fetch('/api/report/health', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(data)
                     });
-
                     if (response.ok) {
                         alert('Report submitted successfully!');
                         e.target.reset();
@@ -354,7 +300,6 @@
                 }
             });
         });
-
         async function loadVillages() {
             try {
                 const response = await fetch('/api/villages');
@@ -373,14 +318,12 @@
                 console.error('Error loading villages:', error);
             }
         }
-
         async function loadProfile() {
             try {
                 const response = await fetch('/api/me');
                 const user = await response.json();
                 if (user.village_name) {
                     document.getElementById('village-name').textContent = user.village_name;
-                    // Auto-select current village in the report form
                     const vSelect = document.getElementById('village_id');
                     if (vSelect && user.village_id) {
                         vSelect.value = user.village_id;
@@ -388,34 +331,28 @@
                 }
             } catch (error) { console.error('Profile error:', error); }
         }
-
         async function openChangeVillageModal() {
             const modal = document.getElementById('changeVillageModal');
             const select = document.getElementById('modal_village_id');
             modal.classList.remove('hidden');
-
             try {
                 const response = await fetch('/api/villages');
                 const villages = await response.json();
                 select.innerHTML = villages.map(v => `<option value="${v.id}">${v.name}</option>`).join('');
             } catch (error) { console.error('Error loading villages:', error); }
         }
-
         function closeChangeVillageModal() {
             document.getElementById('changeVillageModal').classList.add('hidden');
         }
-
         async function saveVillageChange() {
             const villageId = document.getElementById('modal_village_id').value;
             if (!villageId) return;
-
             try {
                 const response = await fetch('/api/me/update-village', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ village_id: villageId })
                 });
-
                 if (response.ok) {
                     location.reload();
                 } else {
@@ -424,7 +361,6 @@
                 }
             } catch (error) { console.error('Update error:', error); }
         }
-
         async function loadRiskStatus() {
             try {
                 const response = await fetch('/api/asha/risk');
@@ -441,7 +377,6 @@
                 }
             } catch (error) { console.error('Risk error:', error); }
         }
-
         async function loadReportsFeed() {
             try {
                 const response = await fetch('/api/reports/recent');
@@ -464,14 +399,10 @@
                 }
             } catch (error) { console.error('Feed error:', error); }
         }
-
         function logout() {
             window.location.href = 'index.html';
         }
     </script>
-    <!-- Chatbot Widget -->
     <script src="chatbot.js"></script>
 </body>
-
-
 </html>

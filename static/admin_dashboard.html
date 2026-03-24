@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,19 +9,16 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
         <style id="dark-theme-override">
-        /* ===== DARK MODE FORCED OVERRIDE ===== */
         html, body {
             background: #0a0a0a !important;
             color: #f5f5f5 !important;
             min-height: 100vh;
         }
-        /* Nav */
         nav, .nav-glass {
             background: rgba(8,0,0,0.92) !important;
             border-bottom: 1px solid rgba(220,38,38,0.20) !important;
             box-shadow: 0 2px 20px rgba(220,38,38,0.12) !important;
         }
-        /* Cards & Sections */
         .stat-card-inner, .section-card, .light-card,
         [class*="rounded-"][class*="shadow"], .card {
             background: #111111 !important;
@@ -33,9 +29,7 @@
             background: linear-gradient(90deg, rgba(220,38,38,0.07), transparent) !important;
             border-bottom: 1px solid rgba(220,38,38,0.12) !important;
         }
-        /* Stat numbers */
         .stat-num { color: #ef4444 !important; }
-        /* Tables */
         table th {
             color: #f87171 !important;
             background: rgba(220,38,38,0.10) !important;
@@ -50,25 +44,20 @@
             color: #fff !important;
             background: rgba(220,38,38,0.07) !important;
         }
-        /* Text visibility */
         h1,h2,h3,h4,h5,h6 { color: #f5f5f5 !important; }
         .text-gray-900, .text-gray-800, .text-gray-700, .text-gray-600 { color: #d1d5db !important; }
         .text-gray-500 { color: #9ca3af !important; }
         .text-gray-400 { color: #a3a3a3 !important; }
-        /* BG overrides */
         .bg-white, .bg-gray-50, .bg-gray-100 { background-color: #111111 !important; }
         .bg-gray-200 { background-color: #1a1a1a !important; }
         .bg-gray-800, .bg-gray-900, .bg-gray-950 { background-color: #0a0a0a !important; }
-        /* Borders */
         .border-gray-100,.border-gray-200,.border-gray-300 { border-color: rgba(220,38,38,0.12) !important; }
-        /* Inputs */
         input, select, textarea {
             background: #1a0505 !important;
             color: #f5f5f5 !important;
             border-color: rgba(220,38,38,0.25) !important;
         }
         input::placeholder { color: #6b7280 !important; }
-        /* Badges */
         .risk-badge-high {
             background: linear-gradient(135deg,#450a0a,#7f1d1d) !important;
             color: #fca5a5 !important;
@@ -84,7 +73,6 @@
             color: #86efac !important;
             border: 1px solid rgba(34,197,94,0.3) !important;
         }
-        /* Alert cards */
         .alert-card-high {
             border-left: 4px solid #ef4444 !important;
             background: #130505 !important;
@@ -95,17 +83,13 @@
             background: #130c00 !important;
             color: #fde68a !important;
         }
-        /* Buttons */
         button, .btn { color: inherit; }
-        /* Main body gradient */
         body {
             background: linear-gradient(135deg,#0a0a0a 0%,#110000 50%,#0f0505 100%) !important;
         }
     </style>
 </head>
-
 <body>
-    <!-- Navbar -->
     <nav class="nav-glass sticky top-0 z-50 px-6 py-3">
         <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3 animate-slide-in-left">
@@ -133,10 +117,7 @@
             </div>
         </div>
     </nav>
-
     <main class="container mx-auto px-6 py-8 space-y-8">
-
-        <!-- High Risk Alert Banner -->
         <div id="high-risk-notification"
             class="hidden notification-slide bg-gradient-to-r from-red-600 to-rose-600 text-white p-5 rounded-2xl shadow-2xl flex items-center justify-between">
             <div class="flex items-center gap-4">
@@ -154,8 +135,6 @@
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
         </div>
-
-        <!-- Overview Stats -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
             <div class="stat-card-inner reveal" style="--delay:0s">
                 <div class="flex items-center justify-between mb-3">
@@ -198,8 +177,6 @@
                 <p class="text-xs text-gray-400 mt-1">Critical zones</p>
             </div>
         </div>
-
-        <!-- Live Alerts Feed -->
         <div class="section-card reveal">
             <div class="section-header">
                 <div class="flex items-center gap-3">
@@ -214,11 +191,8 @@
                 </button>
             </div>
             <div id="alerts-container" class="p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Loaded by JS -->
             </div>
         </div>
-
-        <!-- Charts -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 reveal">
             <div class="section-card p-6">
                 <h3 class="text-lg font-bold text-indigo-900 mb-4 flex items-center gap-2">
@@ -235,8 +209,6 @@
                 <canvas id="riskChart" height="200"></canvas>
             </div>
         </div>
-
-        <!-- AI Analysis History -->
         <div class="section-card reveal">
             <div class="section-header">
                 <div>
@@ -268,8 +240,6 @@
                 </table>
             </div>
         </div>
-
-        <!-- AI Analysis History -->
         <div class="section-card reveal">
             <div class="section-header">
                 <div>
@@ -301,8 +271,6 @@
                 </table>
             </div>
         </div>
-
-        <!-- Field Staff Directory -->
         <div class="section-card reveal">
             <div class="section-header">
                 <div>
@@ -335,8 +303,6 @@
                 </table>
             </div>
         </div>
-
-        <!-- Village Monitoring Matrix -->
         <div class="section-card reveal">
             <div class="section-header">
                 <h3 class="text-lg font-bold text-indigo-900">🗺️ Village Monitoring Matrix</h3>
@@ -359,8 +325,6 @@
                 </table>
             </div>
         </div>
-
-        <!-- Manage Villages -->
         <div class="section-card reveal">
             <div class="section-header">
                 <div>
@@ -383,10 +347,7 @@
                 </table>
             </div>
         </div>
-
     </main>
-
-    <!-- Edit Village Modal -->
     <div id="editVillageModal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-backdrop">
         <div class="modal-enter bg-gray-950 rounded-2xl p-8 max-w-md w-full shadow-2xl border border-indigo-100">
             <div class="flex items-center gap-3 mb-6">
@@ -415,35 +376,27 @@
             </div>
         </div>
     </div>
-
     <script>
-        // Scroll reveal observer
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
         async function loadDashboardData() {
             try {
                 const response = await fetch('/api/admin/risk-status');
                 const data = await response.json();
-
                 let totalCases = 0, highRisk = 0;
                 const riskCounts = { LOW: 0, MEDIUM: 0, HIGH: 0 };
-
                 const tableBody = document.getElementById('village-table-body');
                 tableBody.innerHTML = '';
                 const manageBody = document.getElementById('manage-villages-body');
                 manageBody.innerHTML = '';
-
                 data.forEach((v, i) => {
                     totalCases += v.total_cases;
                     if (v.risk_level === 'HIGH') highRisk++;
                     riskCounts[v.risk_level]++;
-
                     const riskClass = v.risk_level === 'HIGH' ? 'risk-badge-high' :
                         v.risk_level === 'MEDIUM' ? 'risk-badge-medium' : 'risk-badge-low';
-
                     const row = document.createElement('tr');
                     row.style.animationDelay = `${i * 0.05}s`;
                     row.innerHTML = `
@@ -455,7 +408,6 @@
                         <td class="p-4 text-sm text-gray-500">${v.reason}</td>
                     `;
                     tableBody.appendChild(row);
-
                     const mRow = document.createElement('tr');
                     mRow.innerHTML = `
                         <td class="p-4 text-gray-400 text-xs font-mono">${v.village_id}</td>
@@ -471,7 +423,6 @@
                     manageBody.appendChild(mRow);
                 });
                 lucide.createIcons();
-
                 animateNumber('total-villages', data.length);
                 animateNumber('total-cases', totalCases);
                 animateNumber('high-risk-count', highRisk);
@@ -480,7 +431,6 @@
                 loadStaffData();
             } catch (error) { console.error('Error loading data:', error); }
         }
-
         function animateNumber(id, target) {
             const el = document.getElementById(id);
             if (!el) return;
@@ -494,19 +444,16 @@
             };
             requestAnimationFrame(step);
         }
-
         async function loadStaffData() {
             try {
                 const response = await fetch('/api/admin/staff');
                 const staff = await response.json();
                 const tableBody = document.getElementById('staff-table-body');
                 tableBody.innerHTML = '';
-
                 if (staff.length === 0) {
                     tableBody.innerHTML = '<tr><td colspan="5" class="p-8 text-center text-gray-400">No ASHA workers or volunteers registered yet.</td></tr>';
                     return;
                 }
-
                 staff.forEach((member, i) => {
                     const row = document.createElement('tr');
                     row.className = 'animate-fade-in';
@@ -515,7 +462,6 @@
                     const roleClass = member.role === 'asha_worker'
                         ? 'bg-red-950 text-red-600 border border-red-900'
                         : 'bg-purple-100 text-red-600 border border-purple-200';
-
                     row.innerHTML = `
                         <td class="p-4 font-semibold text-gray-200">${member.full_name || 'N/A'}</td>
                         <td class="p-4">
@@ -534,7 +480,6 @@
                 lucide.createIcons();
             } catch (error) { console.error('Error loading staff data:', error); }
         }
-
         async function deleteStaff(userId, name) {
             if (!confirm(`Are you sure you want to delete "${name}" from the system?`)) return;
             try {
@@ -544,17 +489,14 @@
                 else alert('Error: ' + result.error);
             } catch (error) { console.error('Delete error:', error); }
         }
-
         async function loadAlerts() {
             try {
                 const response = await fetch('/api/alerts');
                 const alerts = await response.json();
                 const container = document.getElementById('alerts-container');
                 container.innerHTML = '';
-
                 const badge = document.getElementById('active-alerts');
                 if (badge) animateNumber('active-alerts', alerts.length);
-
                 const highAlert = alerts.find(a => a.risk_level === 'HIGH');
                 const notification = document.getElementById('high-risk-notification');
                 if (highAlert) {
@@ -563,12 +505,10 @@
                 } else {
                     notification.classList.add('hidden');
                 }
-
                 if (alerts.length === 0) {
                     container.innerHTML = '<div class="col-span-3 p-8 text-center text-gray-400">No active alerts at this time. ✅</div>';
                     return;
                 }
-
                 alerts.forEach((a, i) => {
                     const div = document.createElement('div');
                     div.className = `rounded-xl p-4 flex justify-between items-start notification-slide ${a.risk_level === 'HIGH' ? 'alert-card-high' : 'alert-card-medium'
@@ -587,7 +527,6 @@
                 });
             } catch (error) { console.error('Error loading alerts:', error); }
         }
-
         let riskChart;
         function updateRiskChart(counts) {
             const ctx = document.getElementById('riskChart').getContext('2d');
@@ -611,7 +550,6 @@
                 }
             });
         }
-
         async function loadDiseaseChart() {
             try {
                 const response = await fetch('/api/admin/disease-distribution');
@@ -647,10 +585,8 @@
             } catch (error) { console.error('Disease chart error:', error); }
         }
         loadDiseaseChart();
-
         function logout() { window.location.href = 'index.html'; }
         function refreshData() { loadDashboardData(); }
-
         function openEditModal(id, name) {
             document.getElementById('edit-village-id').value = id;
             document.getElementById('edit-village-name').value = name;
@@ -661,7 +597,6 @@
             modal.querySelector('.modal-enter').style.animation = '';
         }
         function closeEditModal() { document.getElementById('editVillageModal').classList.add('hidden'); }
-
         async function saveVillageRename() {
             const id = document.getElementById('edit-village-id').value;
             const newName = document.getElementById('edit-village-name').value;
@@ -680,16 +615,12 @@
                 }
             } catch (err) { console.error('Rename error:', err); }
         }
-
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             loadDashboardData();
             setInterval(loadDashboardData, 10000);
         });
     </script>
-    <!-- Chatbot Widget -->
     <script src="chatbot.js"></script>
 </body>
-
-
 </html>

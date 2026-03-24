@@ -1,28 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Hygiene Awareness and Waterborne Disease Prevention Module">
     <title>SAMAJ HEALTH SURAKSHA - Hygiene Awareness</title>
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-
     <style>
         .theme-transition {
             transition: background-color 0.5s ease, color 0.5s ease;
         }
-
-        /* Dark mode gradient */
         .gradient-bg {
             background: linear-gradient(135deg, #1f2937, #0f172a);
         }
-
-        /* REMOVED: Adjusted Light mode background (.light-bg) */
-
         .glass-effect {
             background-color: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -30,32 +22,25 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
         .card-hover:hover {
             transform: translateY(-5px);
             transition: transform 0.3s ease-in-out;
         }
-
         .animate-fade-in {
             animation: fadeIn 1s ease-in-out forwards;
         }
-
         .animate-slide-in-left {
             animation: slideInLeft 0.8s ease-out forwards;
         }
-
         .animate-slide-in-right {
             animation: slideInRight 0.8s ease-out forwards;
         }
-
         .floating-animation {
             animation: floating 3s ease-in-out infinite;
         }
-
         .pulse-glow {
             animation: pulseGlow 2s infinite;
         }
-
         .feature-card {
             background-color: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(5px);
@@ -64,76 +49,62 @@
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.15);
         }
-
         .feature-card:hover {
             background-color: rgba(255, 255, 255, 0.2);
             transition: background-color 0.3s;
         }
-
         @keyframes fadeIn {
             from {
                 opacity: 0;
             }
-
             to {
                 opacity: 1;
             }
         }
-
         @keyframes slideInLeft {
             from {
                 transform: translateX(-100%);
                 opacity: 0;
             }
-
             to {
                 transform: translateX(0);
                 opacity: 1;
             }
         }
-
         @keyframes slideInRight {
             from {
                 transform: translateX(100%);
                 opacity: 0;
             }
-
             to {
                 transform: translateX(0);
                 opacity: 1;
             }
         }
-
         @keyframes floating {
             0% {
                 transform: translateY(0px);
             }
-
             50% {
                 transform: translateY(-5px);
             }
-
             100% {
                 transform: translateY(0px);
             }
         }
-
         @keyframes pulseGlow {
             0% {
                 box-shadow: 0 0 0 0 rgba(76, 29, 155, 0.7);
             }
-
             70% {
                 box-shadow: 0 0 0 15px rgba(76, 29, 155, 0);
             }
-
             100% {
                 box-shadow: 0 0 0 0 rgba(76, 29, 155, 0);
             }
         }
     </style>
 </head>
-
 <body class="min-h-screen theme-transition gradient-bg text-white">
     <header class="relative z-30 p-6">
         <div class="container mx-auto flex items-center justify-between">
@@ -147,15 +118,12 @@
                     <p id="header-tagline" class="text-white/80 text-sm">Northeast India Health Initiative</p>
                 </div>
             </div>
-
             <div class="flex items-center gap-4 animate-slide-in-right">
-
                 <a href="index.html"
                     class="p-2 rounded-lg transition-all duration-300 hover:scale-110 flex items-center gap-1 header-button">
                     <i data-lucide="home" class="w-5 h-5 header-icon"></i>
                     <span class="hidden sm:inline header-text">Home</span>
                 </a>
-
                 <div class="language-selector relative">
                     <button id="language-btn"
                         class="flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300 header-button">
@@ -177,11 +145,9 @@
                         </div>
                     </div>
                 </div>
-
                 <button id="theme-toggle"
                     class="p-2 rounded-lg transition-all duration-300 hover:scale-110 header-button">
                 </button>
-
                 <button id="help-btn" class="p-2 rounded-lg transition-all duration-300 hover:scale-110 header-button">
                     <i data-lucide="help-circle" class="w-5 h-5 header-icon"></i>
                 </button>
@@ -198,11 +164,9 @@
                 </div>
             </div>
         </section>
-
         <section id="module-content" class="mb-16">
         </section>
     </main>
-
     <footer class="text-center py-8 text-white/70">
         <div class="container mx-auto px-6">
             <p class="mb-2">© 2026 Smart Community Health Monitoring System</p>
@@ -215,10 +179,8 @@
             </div>
         </div>
     </footer>
-
     <script>
         lucide.createIcons();
-
         const translations = {
             en: {
                 mainHeading: 'Hygiene Awareness & Waterborne Disease Prevention',
@@ -413,8 +375,6 @@
                 keyMessage: 'मुख्य संदेश: “स्वच्छ हाथ, सुरक्षित जल, स्वस्थ जीवन”'
             }
         };
-
-        // --- Element Selections ---
         const moduleContent = document.getElementById('module-content');
         const mainHeading = document.getElementById('main-heading');
         const mainTagline = document.getElementById('main-tagline');
@@ -422,33 +382,24 @@
         const langDropdown = document.getElementById('language-dropdown');
         const langBtn = document.getElementById('language-btn');
         const currentLangSpan = document.getElementById('current-language');
-
-        // Elements for Theme Toggle
         const header = document.querySelector('header');
         const footer = document.querySelector('footer');
         const themeToggle = document.getElementById('theme-toggle');
         const body = document.body;
         let isDark = true;
-
-        // New selectors for interactive header elements
         const logoContainer = document.getElementById('logo-container');
         const logoIcon = document.getElementById('logo-icon');
         const headerTitle = document.getElementById('header-title');
         const headerTagline = document.getElementById('header-tagline');
-
         const headerButtons = document.querySelectorAll('.header-button');
         const headerIcons = document.querySelectorAll('.header-icon');
         const headerTexts = document.querySelectorAll('.header-text');
-
-        // --- Function to Render Content (Language) ---
         function renderContent(lang) {
             const data = translations[lang];
-
             mainHeading.textContent = data.mainHeading;
             mainTagline.textContent = data.mainTagline;
             subTagline.textContent = data.subTagline;
             currentLangSpan.textContent = lang === 'en' ? 'English' : (lang === 'as' ? 'অসমীয়া' : (lang === 'bn' ? 'বাংলা' : 'हिंदी'));
-
             moduleContent.innerHTML = `
                 <div class="space-y-12">
                     <div class="animate-fade-in">
@@ -457,21 +408,18 @@
                             <p class="text-lg opacity-80">${data.introSectionContent}</p>
                         </div>
                     </div>
-                    
                     <div class="animate-fade-in" style="--delay: 0.2s;">
                         <div class="text-center mb-6">
                             <h2 class="text-3xl font-bold mb-2">${data.handwashingSectionTitle}</h2>
                             <p class="text-lg opacity-80">${data.handwashingSectionContent}</p>
                         </div>
                     </div>
-
                     <div class="animate-fade-in" style="--delay: 0.4s;">
                         <div class="text-center mb-6">
                             <h2 class="text-3xl font-bold mb-2">${data.waterSectionTitle}</h2>
                             <p class="text-lg opacity-80">${data.waterSectionContent}</p>
                         </div>
                     </div>
-
                     <div class="animate-fade-in" style="--delay: 0.6s;">
                         <div class="text-center mb-6">
                             <h2 class="text-3xl font-bold mb-2">${data.preventiveMeasuresTitle}</h2>
@@ -480,7 +428,6 @@
                             ${data.preventiveMeasuresItems.map(item => `<li class="flex items-start gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-1"></i><p class="text-lg opacity-90">${item}</p></li>`).join('')}
                         </ul>
                     </div>
-                    
                     <div class="animate-fade-in" style="--delay: 0.8s;">
                         <div class="text-center mb-6">
                             <h2 class="text-3xl font-bold mb-2">${data.sanitationTitle}</h2>
@@ -489,7 +436,6 @@
                             ${data.sanitationItems.map(item => `<li class="flex items-start gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-1"></i><p class="text-lg opacity-90">${item}</p></li>`).join('')}
                         </ul>
                     </div>
-
                     <div class="animate-fade-in" style="--delay: 1.0s;">
                         <div class="text-center mb-6">
                             <h2 class="text-3xl font-bold mb-2">${data.healthyHabitsTitle}</h2>
@@ -498,7 +444,6 @@
                             ${data.healthyHabitsItems.map(item => `<li class="flex items-start gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-1"></i><p class="text-lg opacity-90">${item}</p></li>`).join('')}
                         </ul>
                     </div>
-                    
                     <div class="animate-fade-in" style="--delay: 1.2s;">
                         <div class="text-center mb-6">
                             <h2 class="text-3xl font-bold mb-2">${data.awarenessActivitiesTitle}</h2>
@@ -507,7 +452,6 @@
                             ${data.awarenessActivitiesItems.map(item => `<li class="flex items-start gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-1"></i><p class="text-lg opacity-90">${item}</p></li>`).join('')}
                         </ul>
                     </div>
-
                     <div class="animate-fade-in" style="--delay: 1.4s;">
                         <div class="text-center mb-6">
                             <h2 class="text-3xl font-bold mb-2">${data.immediateActionsTitle}</h2>
@@ -518,7 +462,6 @@
                             <p class="text-lg opacity-90">${data.immediateActionsFacility}</p>
                         </div>
                     </div>
-
                     <div class="text-center animate-fade-in" style="--delay: 1.6s;">
                         <p class="text-2xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-pink-300">
                             ${data.keyMessage}
@@ -528,14 +471,10 @@
             `;
             lucide.createIcons();
         }
-
-        // --- Event Listeners for Language ---
         renderContent('en');
-
         langBtn.addEventListener('click', () => {
             langDropdown.classList.toggle('hidden');
         });
-
         document.querySelectorAll('.language-option').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const lang = e.target.dataset.lang;
@@ -543,52 +482,30 @@
                 langDropdown.classList.add('hidden');
             });
         });
-
         document.addEventListener('click', (e) => {
             if (!langBtn.contains(e.target) && !langDropdown.contains(e.target)) {
                 langDropdown.classList.add('hidden');
             }
         });
-
-        // --- THEME TOGGLE LOGIC (COMPLETE & FIXED) ---
-        // Gradient classes for the logo in Light Mode (matches key message)
         const logoGradientClasses = ['text-transparent', 'bg-clip-text', 'bg-gradient-to-r', 'from-yellow-300', 'to-pink-300'];
-
-        // Gradient classes for the light background (New: Subtle Light Gradient for Body)
         const lightBackgroundClasses = ['bg-gradient-to-br', 'from-gray-50', 'to-indigo-100'];
-        // Gradient classes for the light header/footer (Subtle, for better shadow contrast)
         const lightHeaderFooterClasses = ['bg-gradient-to-r', 'from-white', 'to-gray-100'];
-
-
         function applyTheme(isDark) {
             if (isDark) {
-                // --- DARK MODE ---
-                body.classList.remove(...lightBackgroundClasses, 'text-gray-100'); // Clean up light background classes
+                body.classList.remove(...lightBackgroundClasses, 'text-gray-100');
                 body.classList.add('gradient-bg', 'text-white');
-
-                // Header: transparent/glass background
-                header.classList.remove(...lightHeaderFooterClasses, 'text-gray-100', 'shadow-md'); // Clean up light header classes
+                header.classList.remove(...lightHeaderFooterClasses, 'text-gray-100', 'shadow-md');
                 header.classList.add('bg-transparent', 'text-white');
-
-                // Footer: dark text color
-                footer.classList.remove(...lightHeaderFooterClasses, 'text-gray-200', 'shadow-inner'); // Clean up light footer classes
+                footer.classList.remove(...lightHeaderFooterClasses, 'text-gray-200', 'shadow-inner');
                 footer.classList.add('text-white/70');
-
-                // LEFT HEADER BLOCK FIX (Dark Mode)
                 logoContainer.classList.remove('bg-purple-200/50');
                 logoContainer.classList.add('bg-gray-950/20');
-
-                // LOGO ICON FIX: Remove Gradient, Apply White
                 logoIcon.classList.remove(...logoGradientClasses);
                 logoIcon.classList.add('text-white');
-
                 headerTitle.classList.remove('text-gray-100');
                 headerTitle.classList.add('text-white');
-
                 headerTagline.classList.remove('text-gray-300');
                 headerTagline.classList.add('text-white/80');
-
-                // Right-Side Interactive Elements
                 headerButtons.forEach(btn => {
                     btn.classList.remove('bg-gray-800', 'hover:bg-gray-300');
                     btn.classList.add('bg-gray-950/20', 'hover:bg-gray-950/30');
@@ -601,40 +518,24 @@
                     text.classList.remove('text-gray-200');
                     text.classList.add('text-white');
                 });
-
-                // Language Dropdown
                 langDropdown.classList.remove('bg-gray-950', 'shadow-lg');
                 langDropdown.classList.add('bg-gray-800/80', 'text-white');
-
                 themeToggle.innerHTML = '<i data-lucide="sun" class="w-5 h-5 text-white"></i>';
             } else {
-                // --- LIGHT MODE (New Gradient Background) ---
                 body.classList.remove('gradient-bg', 'text-white');
-                body.classList.add(...lightBackgroundClasses, 'text-gray-100'); // Apply light gradient background
-
-                // Header: Apply light gradient background
+                body.classList.add(...lightBackgroundClasses, 'text-gray-100');
                 header.classList.remove('bg-transparent', 'text-white');
                 header.classList.add(...lightHeaderFooterClasses, 'text-gray-100', 'shadow-md');
-
-                // Footer: Apply light gradient background
                 footer.classList.remove('text-white/70');
                 footer.classList.add(...lightHeaderFooterClasses, 'text-gray-200', 'shadow-inner');
-
-                // LEFT HEADER BLOCK FIX (Light Mode)
                 logoContainer.classList.remove('bg-gray-950/20');
                 logoContainer.classList.add('bg-purple-200/50');
-
-                // LOGO ICON FIX: Apply Gradient (MATCHING KEY MESSAGE)
                 logoIcon.classList.remove('text-white');
                 logoIcon.classList.add(...logoGradientClasses);
-
                 headerTitle.classList.remove('text-white');
                 headerTitle.classList.add('text-gray-100');
-
                 headerTagline.classList.remove('text-white/80');
                 headerTagline.classList.add('text-gray-300');
-
-                // Right-Side Interactive Elements
                 headerButtons.forEach(btn => {
                     btn.classList.remove('bg-gray-950/20', 'hover:bg-gray-950/30');
                     btn.classList.add('bg-gray-800', 'hover:bg-gray-300');
@@ -647,34 +548,23 @@
                     text.classList.remove('text-white');
                     text.classList.add('text-gray-200');
                 });
-
-                // Language Dropdown
                 langDropdown.classList.remove('bg-gray-800/80', 'text-white');
                 langDropdown.classList.add('bg-gray-950', 'shadow-lg');
-
                 themeToggle.innerHTML = '<i data-lucide="moon" class="w-5 h-5 text-gray-200"></i>';
             }
-            // Re-render icons after changing the toggle button's content
             lucide.createIcons();
         }
-
         themeToggle.addEventListener('click', () => {
             isDark = !isDark;
             applyTheme(isDark);
         });
-
-        // Apply initial theme settings on load
         applyTheme(isDark);
-
-        // Help Button Logic
         const helpBtn = document.getElementById('help-btn');
         if (helpBtn) {
             helpBtn.addEventListener('click', () => {
                 alert("Help & Support Center\n\nFor immediate assistance, please contact:\nHelpline: 1800-123-4567\nEmail: support@samajhealth.org");
             });
         }
-
     </script>
 </body>
-
 </html>
