@@ -1,0 +1,13 @@
+﻿{
+    "Scheme": "internet-facing",
+    "Subnets": [
+        "subnet-01059441eb4a1e8da",
+        "subnet-0621317ce2f660e7c",
+        "subnet-0b61a325a5ac598f2"
+    ],
+    "AvailZones": [
+        "eu-north-1b",
+        "eu-north-1c",
+        "eu-north-1a"
+    ]
+}

@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-init-job
+spec:
+  ttlSecondsAfterFinished: 60
+  template:
+    spec:
+      containers:
+        - name: mysql-init
+          image: mysql:8.0
+          env:
+            - name: MYSQL_PWD
+              value: "WaterBorne2026!"
+          command: ["/bin/sh", "-c"]
+          args:
+            - mysql -h waterborne-db.chow8844mk5l.eu-north-1.rds.amazonaws.com -u admin < /sql/init.sql && echo "Schema initialized!"
+          volumeMounts:
+            - name: sql-volume
+              mountPath: /sql
+      volumes:
+        - name: sql-volume
+          configMap:
+            name: db-init-sql
+      restartPolicy: Never
+  backoffLimit: 3

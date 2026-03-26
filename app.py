@@ -19,12 +19,12 @@ except:
 def preprocess_image(image, img_size=224):
     image = image.resize((img_size, img_size))
     image = np.array(image) / 255.0
-    if image.shape[-1] == 4:  
+    if image.shape[-1] == 4:
         image = image[:, :, :3]
     image = np.expand_dims(image, axis=0)
     return image
 ALLOWED_ORIGINS = ["https://waterbornedisease-production.up.railway.app", "http://127.0.0.1:5000", "http://localhost:5000"]
-SESSION_LIFETIME = 3600 
+SESSION_LIFETIME = 3600
 app = Flask(__name__, static_folder="static", static_url_path="/static")
 app.secret_key = os.getenv("SECRET_KEY", "fallback-secret-key-2024")
 app.config["SESSION_TYPE"] = "filesystem"
@@ -289,8 +289,8 @@ def register():
     password = data.get("password")
     role = data.get("role")
     village_id = data.get("village_id")
-    full_name = data.get("name") 
-    phone_number = data.get("mobile") 
+    full_name = data.get("name")
+    phone_number = data.get("mobile")
     if not phone_number:
         phone_number = data.get("workPhone")
     allowed_roles = ['asha_worker', 'volunteer', 'admin', 'patient']
@@ -407,7 +407,7 @@ def update_my_village():
         cursor = conn.cursor()
         cursor.execute("UPDATE users SET village_id = %s WHERE id = %s", (village_id, session["user_id"]))
         conn.commit()
-        session["village_id"] = village_id 
+        session["village_id"] = village_id
         cursor.close()
         conn.close()
         return jsonify({"success": True})
@@ -415,11 +415,6 @@ def update_my_village():
         if conn: conn.close()
         return jsonify({"error": str(e)}), 500
 def chatbot_response(user_msg: str) -> str:
-    """
-    Decision-support chatbot for Samaj Health Suraksha.
-    Provides information on water-borne diseases, prevention,
-    system usage. Does NOT diagnose or confirm outbreaks.
-    """
     msg = user_msg.lower().strip()
     if any(k in msg for k in ["hi", "hello", "hey", "namaste", "good morning",
                                "good afternoon", "good evening", "greet",
@@ -856,11 +851,6 @@ def chatbot_response(user_msg: str) -> str:
             "**health administrator** or call: **1800-123-4567**.")
 @app.route("/api/chat", methods=["POST"])
 def chat():
-    """
-    Public endpoint — chatbot reads information only, never writes.
-    Disclaimer: This chatbot is an informational assistant.
-    It does not perform diagnosis or automated risk prediction.
-    """
     data = request.get_json(silent=True) or {}
     user_msg = data.get("message", "").strip()
     if not user_msg:

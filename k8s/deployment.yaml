@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: waterborne-app
-          image: gcr.io/YOUR_PROJECT_ID/waterborne-app:latest
+          image: 800380167092.dkr.ecr.eu-north-1.amazonaws.com/waterborne-app:latest
           ports:
             - containerPort: 5000
           env:
