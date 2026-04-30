@@ -18,9 +18,9 @@ pipeline {
         K8S_DEPLOYMENT    = 'waterborne-app'
         K8S_NAMESPACE     = 'default'
 
-        // Jenkins credential IDs (configure these in Jenkins → Manage Credentials)
-        AWS_CREDENTIALS   = 'aws-credentials'   // AWS Access Key + Secret
-        KUBECONFIG_CRED   = 'kubeconfig'         // kubeconfig file secret
+        // Jenkins credential IDs (configure in Jenkins → Manage Credentials)
+        AWS_CREDENTIALS   = 'aws-credentials'
+        KUBECONFIG_CRED   = 'kubeconfig'
     }
 
     options {
@@ -35,9 +35,7 @@ pipeline {
         // ── 1. CHECKOUT ───────────────────────────────────────────────────────
         stage('Checkout') {
             steps {
-                // Declarative Pipeline already auto-checks out via SCM config above.
-                // A second 'checkout scm' would cause a duplicate fetch and fail on
-                // Windows due to SChannel SSL issues.
+                // Declarative Pipeline auto-checks out — just confirm what was checked out
                 echo "📥 Source checked out — Branch: ${env.GIT_BRANCH}, Commit: ${env.GIT_COMMIT?.take(7)}"
             }
         }
@@ -46,10 +44,10 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo '📦 Installing Python dependencies...'
-                sh '''
-                    python3 -m venv .venv
-                    . .venv/bin/activate
-                    pip install --upgrade pip
+                bat '''
+                    python -m venv .venv
+                    call .venv\\Scripts\\activate.bat
+                    python -m pip install --upgrade pip
                     pip install -r requirements.txt
                     pip install pytest flake8
                 '''
@@ -60,12 +58,9 @@ pipeline {
         stage('Lint') {
             steps {
                 echo '🔍 Running flake8 lint checks...'
-                sh '''
-                    . .venv/bin/activate
-                    flake8 app.py \
-                        --max-line-length=120 \
-                        --exclude=.venv,venv,__pycache__ \
-                        --count --statistics
+                bat '''
+                    call .venv\\Scripts\\activate.bat
+                    flake8 app.py --max-line-length=120 --exclude=.venv,venv,__pycache__ --count --statistics
                 '''
             }
         }
@@ -74,14 +69,13 @@ pipeline {
         stage('Test') {
             steps {
                 echo '🧪 Running unit tests...'
-                sh '''
-                    . .venv/bin/activate
-                    # Run tests if tests/ directory exists, else skip gracefully
-                    if [ -d "tests" ]; then
-                        pytest tests/ -v --tb=short --junitxml=test-results.xml
-                    else
-                        echo "No tests/ directory found — skipping tests."
-                    fi
+                bat '''
+                    call .venv\\Scripts\\activate.bat
+                    if exist tests (
+                        pytest tests\\ -v --tb=short --junitxml=test-results.xml
+                    ) else (
+                        echo No tests\\ directory found — skipping tests.
+                    )
                 '''
             }
             post {
@@ -99,7 +93,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 echo "🐳 Building Docker image: ${IMAGE_FULL}"
-                sh "docker build -t ${IMAGE_FULL} -t ${IMAGE_LATEST} ."
+                bat "docker build -t ${IMAGE_FULL} -t ${IMAGE_LATEST} ."
             }
         }
 
@@ -113,11 +107,10 @@ pipeline {
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                 ]]) {
-                    sh '''
-                        aws ecr get-login-password --region ${AWS_REGION} \
-                            | docker login --username AWS --password-stdin ${ECR_REGISTRY}
-                        docker push ${IMAGE_FULL}
-                        docker push ${IMAGE_LATEST}
+                    bat '''
+                        aws ecr get-login-password --region %AWS_REGION% | docker login --username AWS --password-stdin %ECR_REGISTRY%
+                        docker push %IMAGE_FULL%
+                        docker push %IMAGE_LATEST%
                     '''
                 }
             }
@@ -128,21 +121,12 @@ pipeline {
             steps {
                 echo "☸️  Deploying to Kubernetes namespace: ${K8S_NAMESPACE}"
                 withCredentials([file(credentialsId: "${KUBECONFIG_CRED}", variable: 'KUBECONFIG')]) {
-                    sh '''
-                        # Apply latest k8s manifests
-                        kubectl apply -f k8s/secret.yaml      --namespace=${K8S_NAMESPACE}
-                        kubectl apply -f k8s/deployment.yaml  --namespace=${K8S_NAMESPACE}
-                        kubectl apply -f k8s/service.yaml     --namespace=${K8S_NAMESPACE}
-
-                        # Rolling update: set the new image tag
-                        kubectl set image deployment/${K8S_DEPLOYMENT} \
-                            ${K8S_DEPLOYMENT}=${IMAGE_FULL} \
-                            --namespace=${K8S_NAMESPACE}
-
-                        # Wait for rollout to complete (timeout 5 min)
-                        kubectl rollout status deployment/${K8S_DEPLOYMENT} \
-                            --namespace=${K8S_NAMESPACE} \
-                            --timeout=300s
+                    bat '''
+                        kubectl apply -f k8s\\secret.yaml      --namespace=%K8S_NAMESPACE%
+                        kubectl apply -f k8s\\deployment.yaml  --namespace=%K8S_NAMESPACE%
+                        kubectl apply -f k8s\\service.yaml     --namespace=%K8S_NAMESPACE%
+                        kubectl set image deployment/%K8S_DEPLOYMENT% %K8S_DEPLOYMENT%=%IMAGE_FULL% --namespace=%K8S_NAMESPACE%
+                        kubectl rollout status deployment/%K8S_DEPLOYMENT% --namespace=%K8S_NAMESPACE% --timeout=300s
                     '''
                 }
             }
@@ -153,44 +137,26 @@ pipeline {
             steps {
                 echo '💨 Running smoke test against the deployed service...'
                 withCredentials([file(credentialsId: "${KUBECONFIG_CRED}", variable: 'KUBECONFIG')]) {
-                    sh '''
-                        # Get the LoadBalancer external IP / hostname
-                        LB_HOST=$(kubectl get svc ${K8S_DEPLOYMENT} \
-                            --namespace=${K8S_NAMESPACE} \
-                            -o jsonpath="{.status.loadBalancer.ingress[0].hostname}")
-
-                        if [ -z "$LB_HOST" ]; then
-                            LB_HOST=$(kubectl get svc ${K8S_DEPLOYMENT} \
-                                --namespace=${K8S_NAMESPACE} \
-                                -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
-                        fi
-
-                        echo "Testing endpoint: http://${LB_HOST}"
-                        # Retry up to 5 times with 10s delay
-                        for i in 1 2 3 4 5; do
-                            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://${LB_HOST}/ || echo "000")
-                            if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "302" ]; then
-                                echo "✅ Smoke test passed (HTTP ${HTTP_CODE})"
-                                exit 0
-                            fi
-                            echo "Attempt $i failed (HTTP ${HTTP_CODE}), retrying in 10s..."
-                            sleep 10
-                        done
-                        echo "❌ Smoke test failed after 5 attempts"
-                        exit 1
+                    bat '''
+                        for /f "tokens=*" %%i in ('kubectl get svc %K8S_DEPLOYMENT% --namespace=%K8S_NAMESPACE% -o jsonpath="{.status.loadBalancer.ingress[0].hostname}"') do set LB_HOST=%%i
+                        if "%LB_HOST%"=="" (
+                            for /f "tokens=*" %%i in ('kubectl get svc %K8S_DEPLOYMENT% --namespace=%K8S_NAMESPACE% -o jsonpath="{.status.loadBalancer.ingress[0].ip}"') do set LB_HOST=%%i
+                        )
+                        echo Testing endpoint: http://%LB_HOST%
+                        curl -f -s -o NUL -w "HTTP Status: %%{http_code}" http://%LB_HOST%/ || exit 1
                     '''
                 }
             }
         }
 
-        // ── 9. CLEANUP LOCAL DOCKER IMAGES ────────────────────────────────────
+        // ── 9. CLEANUP ────────────────────────────────────────────────────────
         stage('Cleanup') {
             steps {
-                echo '🧹 Removing local Docker images to free disk space...'
-                sh '''
-                    docker rmi ${IMAGE_FULL}  || true
-                    docker rmi ${IMAGE_LATEST} || true
-                    docker image prune -f      || true
+                echo '🧹 Removing local Docker images...'
+                bat '''
+                    docker rmi %IMAGE_FULL%   || exit /b 0
+                    docker rmi %IMAGE_LATEST%  || exit /b 0
+                    docker image prune -f      || exit /b 0
                 '''
             }
         }
@@ -199,22 +165,10 @@ pipeline {
     // ── POST ACTIONS ──────────────────────────────────────────────────────────
     post {
         success {
-            echo """
-            ╔══════════════════════════════════════════════╗
-            ║  ✅  BUILD & DEPLOY SUCCESSFUL               ║
-            ║  Image : ${IMAGE_FULL}
-            ║  Build : #${env.BUILD_NUMBER}               ║
-            ╚══════════════════════════════════════════════╝
-            """
+            echo "✅ BUILD & DEPLOY SUCCESSFUL — Image: ${IMAGE_FULL} | Build: #${env.BUILD_NUMBER}"
         }
         failure {
-            echo """
-            ╔══════════════════════════════════════════════╗
-            ║  ❌  PIPELINE FAILED                         ║
-            ║  Build : #${env.BUILD_NUMBER}               ║
-            ║  Check console output for details.           ║
-            ╚══════════════════════════════════════════════╝
-            """
+            echo "❌ PIPELINE FAILED — Build: #${env.BUILD_NUMBER} — Check console output for details."
         }
         always {
             echo '📊 Pipeline finished. Cleaning workspace...'
