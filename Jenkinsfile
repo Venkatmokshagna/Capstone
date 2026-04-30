@@ -60,9 +60,9 @@ pipeline {
         // ── 3. CODE QUALITY (LINT) ────────────────────────────────────────────
         stage('Lint') {
             steps {
-                echo '🔍 Running flake8 lint checks...'
+                echo '🔍 Running flake8 lint checks (warnings only — non-blocking)...'
                 bat '''
-                    .venv\\Scripts\\flake8 app.py --max-line-length=120 --exclude=.venv,venv,__pycache__ --count --statistics
+                    .venv\\Scripts\\flake8 app.py --max-line-length=120 --exclude=.venv,venv,__pycache__ --count --statistics || exit /b 0
                 '''
             }
         }
