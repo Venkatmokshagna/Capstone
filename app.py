@@ -109,25 +109,58 @@ def calculate_risk(village_id):
     finally: conn.close()
 @app.route("/api/asha/risk", methods=["GET"])
 def get_asha_risk():
-    v_id = session.get("village_id")
-    if not v_id: return jsonify({"risk_level": "LOW", "message": "No village assigned."})
+    if "user_id" not in session:
+        return jsonify({"risk_level": "LOW", "message": "Not authenticated."})
     conn = get_db_connection()
     if not conn: return jsonify({"error": "DB error"}), 503
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT risk_level, message FROM alerts WHERE village_id = %s ORDER BY created_at DESC LIMIT 1", (v_id,))
+    # Total cases across ALL villages in last 7 days
+    cursor.execute("""
+        SELECT COUNT(*) as total_cases
+        FROM health_reports
+        WHERE report_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+    """)
+    total_cases = cursor.fetchone()['total_cases']
+    # Highest active alert across ALL villages
+    cursor.execute("""
+        SELECT risk_level, message FROM alerts
+        ORDER BY FIELD(risk_level, 'HIGH', 'MEDIUM', 'LOW'), created_at DESC
+        LIMIT 1
+    """)
     alert = cursor.fetchone()
     conn.close()
-    return jsonify(alert or {"risk_level": "LOW", "message": "No active alerts."})
+    # Derive risk level from total cases if no alert exists
+    if alert:
+        risk_level = alert['risk_level']
+        message = f"{alert['message']} ({total_cases} total cases in 7 days)"
+    else:
+        if total_cases >= 7:
+            risk_level = "HIGH"
+        elif total_cases >= 3:
+            risk_level = "MEDIUM"
+        else:
+            risk_level = "LOW"
+        message = f"{risk_level} RISK: {total_cases} cases reported in 7 days."
+    return jsonify({"risk_level": risk_level, "message": message})
 @app.route("/api/reports/recent", methods=["GET"])
 def get_recent_reports():
-    v_id = session.get("village_id")
-    if not v_id: return jsonify([])
+    if "user_id" not in session:
+        return jsonify([])
     conn = get_db_connection()
     if not conn: return jsonify([])
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT 'health' as type, disease_type as detail, symptoms as extra, report_date FROM health_reports WHERE village_id = %s ORDER BY report_date DESC LIMIT 5", (v_id,))
+    # Show recent reports across ALL villages so newly submitted reports always appear
+    cursor.execute("""
+        SELECT 'health' as type, disease_type as detail, symptoms as extra, report_date
+        FROM health_reports
+        ORDER BY report_date DESC LIMIT 10
+    """)
     h = cursor.fetchall()
-    cursor.execute("SELECT 'water' as type, CAST(ph_level AS CHAR) as detail, CAST(turbidity AS CHAR) as extra, report_date FROM water_reports WHERE village_id = %s ORDER BY report_date DESC LIMIT 5", (v_id,))
+    cursor.execute("""
+        SELECT 'water' as type, CAST(ph_level AS CHAR) as detail, CAST(turbidity AS CHAR) as extra, report_date
+        FROM water_reports
+        ORDER BY report_date DESC LIMIT 10
+    """)
     w = cursor.fetchall()
     conn.close()
     combined = sorted(h + w, key=lambda x: x['report_date'], reverse=True)

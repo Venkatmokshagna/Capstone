@@ -267,8 +267,20 @@
         </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             lucide.createIcons();
+            // Auth guard: redirect to login if not authenticated
+            try {
+                const authCheck = await fetch('/api/me');
+                if (authCheck.status === 401) {
+                    alert('You are not logged in. Please log in first.');
+                    window.location.href = 'index.html';
+                    return;
+                }
+            } catch (e) {
+                window.location.href = 'index.html';
+                return;
+            }
             loadProfile();
             loadVillages();
             loadRiskStatus();
@@ -292,11 +304,16 @@
                         e.target.reset();
                         loadRiskStatus();
                         loadReportsFeed();
+                    } else if (response.status === 401) {
+                        alert('Session expired. Please log in again.');
+                        window.location.href = 'index.html';
                     } else {
-                        alert('Error submitting report.');
+                        const err = await response.json().catch(() => ({}));
+                        alert('Error submitting report: ' + (err.error || response.statusText));
                     }
                 } catch (error) {
                     console.error('Submit error:', error);
+                    alert('Network error. Please check your connection.');
                 }
             });
         });
