@@ -6,6 +6,9 @@ pipeline {
         // Fix Windows SChannel SSL issue with GitHub
         GIT_SSL_NO_VERIFY = 'true'
 
+        // Full Python path — required because Jenkins SYSTEM account lacks user PATH
+        PYTHON            = 'C:\\Users\\moksh\\AppData\\Local\\Programs\\Python\\Python314\\python.exe'
+
         // AWS & ECR
         AWS_REGION        = 'eu-north-1'
         ECR_REGISTRY      = '870676149845.dkr.ecr.eu-north-1.amazonaws.com'
@@ -45,11 +48,11 @@ pipeline {
             steps {
                 echo '📦 Installing Python dependencies...'
                 bat '''
-                    python -m venv .venv
+                    "%PYTHON%" -m venv .venv
                     call .venv\\Scripts\\activate.bat
-                    python -m pip install --upgrade pip
-                    pip install -r requirements.txt
-                    pip install pytest flake8
+                    "%PYTHON%" -m pip install --upgrade pip
+                    .venv\\Scripts\\pip install -r requirements.txt
+                    .venv\\Scripts\\pip install pytest flake8
                 '''
             }
         }
@@ -59,8 +62,7 @@ pipeline {
             steps {
                 echo '🔍 Running flake8 lint checks...'
                 bat '''
-                    call .venv\\Scripts\\activate.bat
-                    flake8 app.py --max-line-length=120 --exclude=.venv,venv,__pycache__ --count --statistics
+                    .venv\\Scripts\\flake8 app.py --max-line-length=120 --exclude=.venv,venv,__pycache__ --count --statistics
                 '''
             }
         }
@@ -70,11 +72,10 @@ pipeline {
             steps {
                 echo '🧪 Running unit tests...'
                 bat '''
-                    call .venv\\Scripts\\activate.bat
                     if exist tests (
-                        pytest tests\\ -v --tb=short --junitxml=test-results.xml
+                        .venv\\Scripts\\pytest tests\\ -v --tb=short --junitxml=test-results.xml
                     ) else (
-                        echo No tests\\ directory found — skipping tests.
+                        echo No tests directory found - skipping tests.
                     )
                 '''
             }
