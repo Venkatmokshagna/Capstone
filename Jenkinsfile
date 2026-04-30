@@ -3,6 +3,9 @@ pipeline {
 
     // ── Global environment variables ─────────────────────────────────────────
     environment {
+        // Fix Windows SChannel SSL issue with GitHub
+        GIT_SSL_NO_VERIFY = 'true'
+
         // AWS & ECR
         AWS_REGION        = 'eu-north-1'
         ECR_REGISTRY      = '870676149845.dkr.ecr.eu-north-1.amazonaws.com'
@@ -32,8 +35,10 @@ pipeline {
         // ── 1. CHECKOUT ───────────────────────────────────────────────────────
         stage('Checkout') {
             steps {
-                echo '📥 Checking out source code...'
-                checkout scm
+                // Declarative Pipeline already auto-checks out via SCM config above.
+                // A second 'checkout scm' would cause a duplicate fetch and fail on
+                // Windows due to SChannel SSL issues.
+                echo "📥 Source checked out — Branch: ${env.GIT_BRANCH}, Commit: ${env.GIT_COMMIT?.take(7)}"
             }
         }
 
