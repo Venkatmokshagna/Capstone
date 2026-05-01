@@ -11,7 +11,7 @@ pipeline {
 
         // AWS & ECR
         AWS_REGION        = 'eu-north-1'
-        ECR_REGISTRY      = '870676149845.dkr.ecr.eu-north-1.amazonaws.com'
+        ECR_REGISTRY      = '472548059087.dkr.ecr.eu-north-1.amazonaws.com'
         ECR_REPO          = 'waterborne-app'
         IMAGE_TAG         = "${env.BUILD_NUMBER}"
         IMAGE_FULL        = "${ECR_REGISTRY}/${ECR_REPO}:${IMAGE_TAG}"
